@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 
 interface ImageCarouselProps {
-  images: string[];
-  className?: string;
+  images?: string[];
   autoPlay?: boolean;
   autoPlayInterval?: number;
+  className?: string;
 }
 
-const ImageCarousel = ({ images = [], className = "", autoPlay = true, autoPlayInterval = 5000 }: ImageCarouselProps) => {
+const ImageCarousel = ({ images = [], autoPlay = true, autoPlayInterval = 5000, className = "" }: ImageCarouselProps) => {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -17,24 +17,15 @@ const ImageCarousel = ({ images = [], className = "", autoPlay = true, autoPlayI
   }, [images.length, autoPlay, autoPlayInterval]);
 
   if (!images || images.length === 0) {
-    return (
-      <div className={`w-full h-64 bg-muted flex items-center justify-center ${className}`}>
-        <span className="text-muted-foreground">No images</span>
-      </div>
-    );
+    return <div className={`w-full h-64 bg-muted flex items-center justify-center ${className}`}><span className="text-muted-foreground">No images</span></div>;
   }
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={className}>
       <div className="w-full h-72 sm:h-96 overflow-hidden rounded-md bg-black">
-        <img
-          src={images[index]}
-          alt={`slide-${index}`}
-          className="w-full h-full object-cover transition-transform duration-500"
-        />
+        <img src={images[index]} alt={`slide-${index}`} className="w-full h-full object-cover transition-transform duration-500" />
       </div>
 
-      {/* Prev/Next */}
       {images.length > 1 && (
         <>
           <button
@@ -52,7 +43,6 @@ const ImageCarousel = ({ images = [], className = "", autoPlay = true, autoPlayI
             ›
           </button>
 
-          {/* Thumbnails */}
           <div className="mt-3 flex gap-2 justify-center">
             {images.map((src, i) => (
               <button

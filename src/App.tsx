@@ -1,24 +1,20 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
-// use named import because sonner.tsx does not export default
-import { Sonner } from "@/components/ui/sonner";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-
-import Home from "@/pages/Home";
-import Listings from "@/pages/Listings";
-import CurrentListings from "@/pages/CurrentListings";
-import ClosedTransactions from "@/pages/ClosedTransactions";
-const ListingDetails = () => {
-  return <div>Listing details page is not available.</div>;
-};
-import Contact from "@/pages/Contact";
-import NDA from "@/pages/NDA";
-import Team from "@/pages/Team";
-import BusinessBrokerage from "@/pages/BusinessBrokerage";
-import NotFound from "@/pages/NotFound";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import Listings from "./pages/Listings";
+import CurrentListings from "./pages/CurrentListings";
+import ClosedTransactions from "./pages/ClosedTransactions";
+import ListingDetails from "./pages/ListingDetails";
+import Contact from "./pages/Contact";
+import NotFound from "./pages/NotFound";
+import NDA from "./pages/NDA";
+import BusinessBrokerage from "./pages/BusinessBrokerage";
+import Team from "./pages/Team";
 
 const queryClient = new QueryClient();
 

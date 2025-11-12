@@ -1,18 +1,17 @@
-import { Link } from "react-router-dom";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { MapPin, Building2, DollarSign, Image as ImageIcon } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 interface PropertyCardProps {
-  id: string | number;
+  id: string;
   title: string;
   location: string;
-  price?: string;
-  askingPrice?: string;
-  type?: string;
-  size?: string;
-  image?: string;
+  price: string;
+  type: string;
+  size: string;
+  image: string;
   status?: "available" | "sold" | "pending";
 }
 
@@ -21,42 +20,65 @@ const PropertyCard = ({
   title,
   location,
   price,
-  askingPrice,
-  type = "",
-  size = "",
+  type,
+  size,
   image,
   status = "available",
 }: PropertyCardProps) => {
   const [imageError, setImageError] = useState(false);
-  const displayPrice = price || askingPrice || "Price on request";
+  
+  const statusColors = {
+    available: "bg-primary text-primary-foreground",
+    sold: "bg-neutral-800 text-white",
+    pending: "bg-yellow-500 text-white",
+  };
+
+  const handleImageError = () => {
+    setImageError(true);
+  };
 
   return (
-    <Link to={`/listings/${id}`} target="_blank" rel="noopener noreferrer" className="block">
-      <div className="group overflow-hidden hover:shadow-lg transition-all duration-300 h-full border rounded-md">
+    <Link to={`/listings/${id}`}>
+      <Card className="group overflow-hidden hover:shadow-lg transition-all duration-300 h-full">
         <div className="relative overflow-hidden aspect-[4/3] bg-muted">
-          {!image || imageError ? (
+          {imageError || !image ? (
             <div className="w-full h-full flex items-center justify-center bg-muted">
-              <span className="text-muted-foreground">No image</span>
+              <ImageIcon className="h-12 w-12 text-muted-foreground" />
             </div>
           ) : (
             <img
               src={image}
               alt={title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              onError={() => setImageError(true)}
+              onError={handleImageError}
             />
           )}
+          <Badge className={`absolute top-4 right-4 ${statusColors[status]}`}>
+            {status === "available" ? "Available" : status === "sold" ? "Sold" : "Pending"}
+          </Badge>
         </div>
-
-        <div className="p-4">
-          <h3 className="font-semibold text-lg mb-1">{title}</h3>
-          <p className="text-sm text-muted-foreground mb-2">{location}</p>
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-muted-foreground">{type} • {size}</div>
-            <div className="text-lg font-bold">{displayPrice}</div>
+        <CardContent className="p-6">
+          <h3 className="font-semibold text-xl mb-2 group-hover:text-primary transition-colors">
+            {title}
+          </h3>
+          <div className="space-y-2 text-sm text-muted-foreground">
+            <div className="flex items-center space-x-2">
+              <MapPin className="h-4 w-4 text-primary" />
+              <span>{location}</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Building2 className="h-4 w-4 text-primary" />
+              <span>{type} • {size}</span>
+            </div>
           </div>
-        </div>
-      </div>
+        </CardContent>
+        <CardFooter className="px-6 pb-6 pt-0">
+          <div className="flex items-center space-x-2">
+            <DollarSign className="h-5 w-5 text-primary" />
+            <span className="text-2xl font-bold text-foreground">{price}</span>
+          </div>
+        </CardFooter>
+      </Card>
     </Link>
   );
 };

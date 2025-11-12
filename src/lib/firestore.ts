@@ -1,4 +1,4 @@
-import { collection, getDocs, QueryDocumentSnapshot, DocumentData } from "firebase/firestore";
+import { collection, getDocs, QueryDocumentSnapshot, DocumentData, doc as firestoreDoc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
 // Property/Listing interface
@@ -6,7 +6,7 @@ export interface Listing {
   id: string;
   title: string;
   location: string;
-  askingPrice: string;
+  price: string;
   type: string;
   size: string;
   image: string;
@@ -18,25 +18,25 @@ export interface Listing {
   [key: string]: any; // Allow for additional fields
 }
 
-// Helper function to format askingPrice
-const formataskingPrice = (askingPrice: any): string => {
-  if (!askingPrice && askingPrice !== 0) return "askingPrice on request";
+// Helper function to format price
+const formatPrice = (price: any): string => {
+  if (!price && price !== 0) return "Price on request";
   
   // If it's already a string, return it
-  if (typeof askingPrice === "string") return askingPrice;
+  if (typeof price === "string") return price;
   
   // If it's a number, format it
-  if (typeof askingPrice === "number") {
-    if (askingPrice >= 1000000) {
-      return `$${(askingPrice / 1000000).toFixed(1)}M`;
-    } else if (askingPrice >= 1000) {
-      return `$${(askingPrice / 1000).toFixed(0)}K`;
+  if (typeof price === "number") {
+    if (price >= 1000000) {
+      return `$${(price / 1000000).toFixed(1)}M`;
+    } else if (price >= 1000) {
+      return `$${(price / 1000).toFixed(0)}K`;
     } else {
-      return `$${askingPrice.toLocaleString()}`;
+      return `$${price.toLocaleString()}`;
     }
   }
   
-  return "askingPrice on request";
+  return "Price on request";
 };
 
 // Helper function to format size
@@ -58,9 +58,9 @@ const formatSize = (size: any): string => {
 const convertFirestoreDocToListing = (doc: QueryDocumentSnapshot<DocumentData>): Listing => {
   const data = doc.data();
   
-  // Try to get askingPrice from various fields
-  const rawaskingPrice = data.askingPrice || data.askingPriceFormatted || data.askingPriceAmount || data.value || data.price || data.listingPrice;
-  const askingPrice = formataskingPrice(rawaskingPrice);
+  // Try to get price from various fields
+  const rawPrice = data.price || data.priceFormatted || data.priceAmount || data.value;
+  const price = formatPrice(rawPrice);
   
   // Try to get size from various fields
   const rawSize = data.size || data.sizeFormatted || data.squareFeet || data.area;
@@ -73,9 +73,7 @@ const convertFirestoreDocToListing = (doc: QueryDocumentSnapshot<DocumentData>):
     id: doc.id,
     title: data.title || data.name || data.propertyName || "Untitled Property",
     location: data.location || data.address || data.city || data.locationName || "Location not specified",
-    askingPrice: askingPrice,
-    // add canonical `price` field so UI components that expect `price` work
-    price: askingPrice,
+    price: price,
     type: data.type || data.propertyType || data.category || "Commercial",
     size: size,
     image: image,
@@ -87,8 +85,8 @@ const convertFirestoreDocToListing = (doc: QueryDocumentSnapshot<DocumentData>):
     ...Object.fromEntries(
       Object.entries(data).filter(([key]) => 
         !["title", "name", "propertyName", "location", "address", "city", "locationName", 
-          "askingPrice", "askingPriceFormatted", "askingPriceAmount", "value", "price", "listingPrice",
-          "size", "sizeFormatted", "squareFeet", "area", "type", "propertyType", "category", "image", "imageUrl", 
+          "price", "priceFormatted", "priceAmount", "value", "size", "sizeFormatted", 
+          "squareFeet", "area", "type", "propertyType", "category", "image", "imageUrl", 
           "photo", "thumbnail", "imageURL", "status", "description", "details"].includes(key)
       )
     ),
@@ -141,6 +139,25 @@ export const fetchPreviousDeals = async (): Promise<Listing[]> => {
       console.error("❌ Permission denied! Please update Firestore security rules in Firebase Console.");
       console.error("📖 See FIREBASE_RULES_INSTRUCTIONS.md for step-by-step instructions.");
       throw new Error("Missing or insufficient permissions. Please update Firestore security rules in Firebase Console to allow read access to the 'previous-deals' collection.");
+    }
+    throw error;
+  }
+};
+
+// Fetch single listing by document id
+export const fetchListingById = async (id: string): Promise<Listing | null> => {
+  try {
+    const docRef = firestoreDoc(db, "listings", String(id));
+    const snap = await getDoc(docRef);
+    if (!snap.exists()) return null;
+    // convertFirestoreDocToListing expects a QueryDocumentSnapshot; cast is fine here at runtime
+    // (we only need doc.id and doc.data())
+    return convertFirestoreDocToListing(snap as QueryDocumentSnapshot<DocumentData>);
+  } catch (error: any) {
+    console.error("Error fetching listing by id:", error);
+    if (error?.code === "permission-denied") {
+      console.error("❌ Permission denied! Please update Firestore security rules in Firebase Console.");
+      throw new Error("Missing or insufficient permissions. Please update Firestore security rules.");
     }
     throw error;
   }
