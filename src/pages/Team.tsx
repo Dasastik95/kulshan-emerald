@@ -53,9 +53,30 @@ const Team = () => {
         </div>
 
         {/* Team Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {teamMembers.map((member, index) => (
-            <TeamMemberCard key={index} {...member} />
+            <div key={index} className="bg-white border border-neutral-200 rounded-lg p-8 text-center hover:shadow-lg transition-shadow">
+              <div className="mb-6 flex justify-center">
+                <img 
+                  src={member.image} 
+                  alt={member.name}
+                  className="w-32 h-32 rounded-full object-cover"
+                />
+              </div>
+              <h3 className="text-xl font-bold mb-2">{member.name}</h3>
+              <p className="text-primary font-semibold mb-4">{member.title}</p>
+              <p className="text-muted-foreground text-sm mb-6 line-clamp-4">
+                {member.bio}
+              </p>
+              <div className="flex justify-center gap-4 text-sm">
+                <a href={`mailto:${member.email}`} className="text-primary hover:underline">
+                  Email
+                </a>
+                <a href={`tel:${member.phone}`} className="text-primary hover:underline">
+                  Phone
+                </a>
+              </div>
+            </div>
           ))}
         </div>
 

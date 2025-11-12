@@ -180,7 +180,7 @@ const Home = () => {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-primary text-white">
+      <section className="py-6 bg-primary text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div className="space-y-2">
@@ -203,7 +203,7 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-accent">
+      <section className="py-14 bg-accent">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold mb-6">
             What is your real estate worth today?
@@ -218,7 +218,7 @@ const Home = () => {
       </section>
 
       {/* Current Listings Slideshow */}
-      <section className="py-20">
+      <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-end mb-12">
             <div>
@@ -249,7 +249,7 @@ const Home = () => {
           >
             <CarouselContent>
               {currentListings.map((property) => (
-                <CarouselItem key={property.id} className="md:basis-1/2 lg:basis-1/3">
+                <CarouselItem key={property.id} className="md:basis-1/3 lg:basis-1/4">
                   <div className="p-1">
                     <PropertyCard {...property} />
                   </div>
@@ -294,7 +294,7 @@ const Home = () => {
           >
             <CarouselContent>
               {closedTransactions.map((property) => (
-                <CarouselItem key={property.id} className="md:basis-1/2 lg:basis-1/3">
+                <CarouselItem key={property.id} className="md:basis-1/3 lg:basis-1/4">
                   <div className="p-1">
                     <PropertyCard {...property} />
                   </div>
