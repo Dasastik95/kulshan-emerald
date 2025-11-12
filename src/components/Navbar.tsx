@@ -19,7 +19,7 @@ const Navbar = () => {
     },
     { to: "/business-brokerage", label: "Business Brokerage" },
     { to: "/team", label: "Team" },
-    { to: "/", label: "NDA" },
+    { to: "/nda", label: "NDA" },
     { to: "/contact", label: "Contact" },
   ];
 
