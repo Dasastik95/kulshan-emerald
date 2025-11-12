@@ -1,74 +1,43 @@
 import { Link } from "react-router-dom";
-import { Filter } from "lucide-react";
+import { Filter, Loader2, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PropertyCard from "@/components/PropertyCard";
-import property1 from "@/assets/property-1.jpg";
-import property2 from "@/assets/property-2.jpg";
-import property3 from "@/assets/property-3.jpg";
+import { useListings } from "@/hooks/useListings";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const CurrentListings = () => {
-  const currentListings = [
-    {
-      id: "1",
-      title: "Premium Office Building",
-      location: "Downtown District",
-      price: "4.2M",
-      type: "Office",
-      size: "25,000 SF",
-      image: property1,
-      status: "available" as const,
-    },
-    {
-      id: "2",
-      title: "Retail Shopping Center",
-      location: "Main Street",
-      price: "6.8M",
-      type: "Retail",
-      size: "45,000 SF",
-      image: property2,
-      status: "available" as const,
-    },
-    {
-      id: "3",
-      title: "Industrial Warehouse",
-      location: "Commerce Park",
-      price: "3.5M",
-      type: "Industrial",
-      size: "50,000 SF",
-      image: property3,
-      status: "available" as const,
-    },
-    {
-      id: "7",
-      title: "Mixed-Use Development",
-      location: "Urban Center",
-      price: "12.5M",
-      type: "Mixed-Use",
-      size: "75,000 SF",
-      image: property1,
-      status: "available" as const,
-    },
-    {
-      id: "8",
-      title: "Restaurant Space",
-      location: "Entertainment District",
-      price: "1.8M",
-      type: "Retail",
-      size: "8,500 SF",
-      image: property2,
-      status: "available" as const,
-    },
-    {
-      id: "9",
-      title: "Logistics Facility",
-      location: "Airport Corridor",
-      price: "9.2M",
-      type: "Industrial",
-      size: "120,000 SF",
-      image: property3,
-      status: "available" as const,
-    },
-  ];
+  const { data: currentListings = [], isLoading, isError, error } = useListings();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center min-h-[60vh]">
+            <div className="text-center">
+              <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
+              <p className="text-muted-foreground">Loading listings...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="min-h-screen py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Alert variant="destructive" className="mb-8">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>
+              {error?.message || "Failed to load listings. Please try again later."}
+            </AlertDescription>
+          </Alert>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen py-12">
@@ -96,7 +65,7 @@ const CurrentListings = () => {
         <div className="space-y-8">
           <div className="flex justify-between items-center">
             <p className="text-muted-foreground">
-              {currentListings.length} properties available
+              {currentListings.length} {currentListings.length === 1 ? "property" : "properties"} available
             </p>
             <Button variant="outline" size="sm">
               <Filter className="h-4 w-4 mr-2" />
@@ -104,11 +73,20 @@ const CurrentListings = () => {
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {currentListings.map((property) => (
-              <PropertyCard key={property.id} {...property} />
-            ))}
-          </div>
+          {currentListings.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-lg text-muted-foreground mb-4">No listings available at this time.</p>
+              <Button variant="outline" asChild>
+                <Link to="/contact">Contact Us</Link>
+              </Button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {currentListings.map((property) => (
+                <PropertyCard key={property.id} {...property} />
+              ))}
+            </div>
+          )}
         </div>
 
         {/* CTA Section */}
@@ -127,4 +105,3 @@ const CurrentListings = () => {
 };
 
 export default CurrentListings;
-

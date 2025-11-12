@@ -25,9 +25,10 @@ const formSchema = z.object({
 interface ContactFormProps {
   title?: string;
   subtitle?: string;
+  hideHeader?: boolean;
 }
 
-const ContactForm = ({ title = "Get in Touch", subtitle }: ContactFormProps) => {
+const ContactForm = ({ title = "Get in Touch", subtitle, hideHeader = false }: ContactFormProps) => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -55,12 +56,16 @@ const ContactForm = ({ title = "Get in Touch", subtitle }: ContactFormProps) => 
     setIsSubmitting(false);
   };
 
+  const showHeader = !hideHeader && (title || subtitle);
+
   return (
-    <div className="bg-card p-8 rounded-lg shadow-md">
-      <div className="mb-6">
-        <h3 className="text-2xl font-bold text-foreground">{title}</h3>
-        {subtitle && <p className="text-muted-foreground mt-2">{subtitle}</p>}
-      </div>
+    <div className="bg-transparent">
+      {showHeader && (
+        <div className="mb-6">
+          {title && <h3 className="text-2xl font-bold text-foreground">{title}</h3>}
+          {subtitle && <p className="text-muted-foreground mt-2">{subtitle}</p>}
+        </div>
+      )}
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">

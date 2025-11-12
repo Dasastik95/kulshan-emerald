@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, TrendingUp, Award, Users } from "lucide-react";
+import { ArrowRight, TrendingUp, Award, Users, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PropertyCard from "@/components/PropertyCard";
 import {
@@ -11,146 +11,17 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import heroImage from "@/assets/hero-image.jpg";
-import property1 from "@/assets/property-1.jpg";
-import property2 from "@/assets/property-2.jpg";
-import property3 from "@/assets/property-3.jpg";
+import { useListings, usePreviousDeals } from "@/hooks/useListings";
 
 const Home = () => {
-  const currentListings = [
-    {
-      id: "1",
-      title: "Premium Office Building",
-      location: "Downtown District",
-      price: "4.2M",
-      type: "Office",
-      size: "25,000 SF",
-      image: property1,
-      status: "available" as const,
-    },
-    {
-      id: "2",
-      title: "Retail Shopping Center",
-      location: "Main Street",
-      price: "6.8M",
-      type: "Retail",
-      size: "45,000 SF",
-      image: property2,
-      status: "available" as const,
-    },
-     {
-      id: "1",
-      title: "Premium Office Building",
-      location: "Downtown District",
-      price: "4.2M",
-      type: "Office",
-      size: "25,000 SF",
-      image: property1,
-      status: "available" as const,
-    },
-    {
-      id: "2",
-      title: "Retail Shopping Center",
-      location: "Main Street",
-      price: "6.8M",
-      type: "Retail",
-      size: "45,000 SF",
-      image: property2,
-      status: "available" as const,
-    },
-    {
-      id: "1",
-      title: "Premium Office Building",
-      location: "Downtown District",
-      price: "4.2M",
-      type: "Office",
-      size: "25,000 SF",
-      image: property1,
-      status: "available" as const,
-    },
-    {
-      id: "2",
-      title: "Retail Shopping Center",
-      location: "Main Street",
-      price: "6.8M",
-      type: "Retail",
-      size: "45,000 SF",
-      image: property2,
-      status: "available" as const,
-    },
-    {
-      id: "3",
-      title: "Industrial Warehouse",
-      location: "Commerce Park",
-      price: "3.5M",
-      type: "Industrial",
-      size: "50,000 SF",
-      image: property3,
-      status: "available" as const,
-    },
-    {
-      id: "3",
-      title: "Industrial Warehouse",
-      location: "Commerce Park",
-      price: "3.5M",
-      type: "Industrial",
-      size: "50,000 SF",
-      image: property3,
-      status: "available" as const,
-    },
-  ];
+  const { data: currentListings = [], isLoading: isLoadingListings } = useListings();
+  const { data: closedTransactions = [], isLoading: isLoadingDeals } = usePreviousDeals();
 
-  const closedTransactions = [
-    {
-      id: "4",
-      title: "Corporate Headquarters",
-      location: "Business District",
-      price: "8.5M",
-      type: "Office",
-      size: "60,000 SF",
-      image: property1,
-      status: "sold" as const,
-    },
-     {
-      id: "1",
-      title: "Premium Office Building",
-      location: "Downtown District",
-      price: "4.2M",
-      type: "Office",
-      size: "25,000 SF",
-      image: property1,
-      status: "available" as const,
-    },
-    {
-      id: "2",
-      title: "Retail Shopping Center",
-      location: "Main Street",
-      price: "6.8M",
-      type: "Retail",
-      size: "45,000 SF",
-      image: property2,
-      status: "available" as const,
-    },
-    {
-      id: "5",
-      title: "Medical Office Complex",
-      location: "Healthcare District",
-      price: "5.2M",
-      type: "Medical",
-      size: "35,000 SF",
-      image: property2,
-      status: "sold" as const,
-    },
-    {
-      id: "6",
-      title: "Distribution Center",
-      location: "Industrial Zone",
-      price: "7.8M",
-      type: "Industrial",
-      size: "85,000 SF",
-      image: property3,
-      status: "sold" as const,
-    },
-  ];
+  // Limit to first 8 listings for carousel display
+  const displayedListings = currentListings.slice(0, 8);
+  const displayedDeals = closedTransactions.slice(0, 8);
+
+  const isLoading = isLoadingListings || isLoadingDeals;
 
   return (
     <div className="min-h-screen">
@@ -235,30 +106,40 @@ const Home = () => {
             </Button>
           </div>
 
-          <Carousel
-            opts={{
-              align: "start",
-              loop: true,
-            }}
-            plugins={[
-              Autoplay({
-                delay: 4000,
-              }),
-            ]}
-            className="w-full"
-          >
-            <CarouselContent>
-              {currentListings.map((property) => (
-                <CarouselItem key={property.id} className="md:basis-1/3 lg:basis-1/4">
-                  <div className="p-1">
-                    <PropertyCard {...property} />
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="hidden md:flex" />
-            <CarouselNext className="hidden md:flex" />
-          </Carousel>
+          {isLoadingListings ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          ) : displayedListings.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">No listings available at this time.</p>
+            </div>
+          ) : (
+            <Carousel
+              opts={{
+                align: "start",
+                loop: displayedListings.length > 4,
+              }}
+              plugins={[
+                Autoplay({
+                  delay: 4000,
+                }),
+              ]}
+              className="w-full"
+            >
+              <CarouselContent>
+                {displayedListings.map((property) => (
+                  <CarouselItem key={property.id} className="md:basis-1/3 lg:basis-1/4">
+                    <div className="p-1">
+                      <PropertyCard {...property} />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="hidden md:flex" />
+              <CarouselNext className="hidden md:flex" />
+            </Carousel>
+          )}
         </div>
       </section>
 
@@ -280,30 +161,40 @@ const Home = () => {
             </Button>
           </div>
 
-          <Carousel
-            opts={{
-              align: "start",
-              loop: true,
-            }}
-            plugins={[
-              Autoplay({
-                delay: 4000,
-              }),
-            ]}
-            className="w-full"
-          >
-            <CarouselContent>
-              {closedTransactions.map((property) => (
-                <CarouselItem key={property.id} className="md:basis-1/3 lg:basis-1/4">
-                  <div className="p-1">
-                    <PropertyCard {...property} />
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="hidden md:flex" />
-            <CarouselNext className="hidden md:flex" />
-          </Carousel>
+          {isLoadingDeals ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          ) : displayedDeals.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">No closed transactions to display at this time.</p>
+            </div>
+          ) : (
+            <Carousel
+              opts={{
+                align: "start",
+                loop: displayedDeals.length > 4,
+              }}
+              plugins={[
+                Autoplay({
+                  delay: 4000,
+                }),
+              ]}
+              className="w-full"
+            >
+              <CarouselContent>
+                {displayedDeals.map((property) => (
+                  <CarouselItem key={property.id} className="md:basis-1/3 lg:basis-1/4">
+                    <div className="p-1">
+                      <PropertyCard {...property} />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="hidden md:flex" />
+              <CarouselNext className="hidden md:flex" />
+            </Carousel>
+          )}
         </div>
       </section>
     </div>

@@ -1,19 +1,24 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import Home from "./pages/Home";
-import Listings from "./pages/Listings";
-import CurrentListings from "./pages/CurrentListings";
-import ClosedTransactions from "./pages/ClosedTransactions";
-import BusinessBrokerage from "./pages/BusinessBrokerage";
-import Team from "./pages/Team";
-import NDA from "./pages/NDA";
-import Contact from "./pages/Contact";
-import NotFound from "./pages/NotFound";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/toaster";
+// use named import because sonner.tsx does not export default
+import { Sonner } from "@/components/ui/sonner";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+
+import Home from "@/pages/Home";
+import Listings from "@/pages/Listings";
+import CurrentListings from "@/pages/CurrentListings";
+import ClosedTransactions from "@/pages/ClosedTransactions";
+const ListingDetails = () => {
+  return <div>Listing details page is not available.</div>;
+};
+import Contact from "@/pages/Contact";
+import NDA from "@/pages/NDA";
+import Team from "@/pages/Team";
+import BusinessBrokerage from "@/pages/BusinessBrokerage";
+import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -31,11 +36,11 @@ const App = () => (
               <Route path="/listings" element={<Listings />} />
               <Route path="/listings/current" element={<CurrentListings />} />
               <Route path="/listings/closed" element={<ClosedTransactions />} />
-              <Route path="/business-brokerage" element={<BusinessBrokerage />} />
-              <Route path="/team" element={<Team />} />
-              <Route path="/nda" element={<NDA />} />
+              <Route path="/listings/:id" element={<ListingDetails />} />
               <Route path="/contact" element={<Contact />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="/nda" element={<NDA />} />
+              <Route path="/team" element={<Team />} />
+              <Route path="/business-brokerage" element={<BusinessBrokerage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
