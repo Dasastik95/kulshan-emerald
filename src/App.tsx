@@ -7,6 +7,8 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Listings from "./pages/Listings";
+import CurrentListings from "./pages/CurrentListings";
+import ClosedTransactions from "./pages/ClosedTransactions";
 import BusinessBrokerage from "./pages/BusinessBrokerage";
 import Team from "./pages/Team";
 import Contact from "./pages/Contact";
@@ -26,7 +28,8 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/listings" element={<Listings />} />
-              <Route path="/listings/closed" element={<Listings />} />
+              <Route path="/listings/current" element={<CurrentListings />} />
+              <Route path="/listings/closed" element={<ClosedTransactions />} />
               <Route path="/business-brokerage" element={<BusinessBrokerage />} />
               <Route path="/team" element={<Team />} />
               <Route path="/contact" element={<Contact />} />
