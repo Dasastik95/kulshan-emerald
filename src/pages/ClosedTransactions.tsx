@@ -1,12 +1,43 @@
 import { Link } from "react-router-dom";
-import { Loader2, AlertCircle } from "lucide-react";
+import { Loader2, AlertCircle, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import PropertyCard from "@/components/PropertyCard";
 import { usePreviousDeals } from "@/hooks/useListings";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useEffect, useMemo, useState } from "react";
 
 const ClosedTransactions = () => {
   const { data: closedTransactions = [], isLoading, isError, error } = usePreviousDeals();
+  const [query, setQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedQuery(query.trim().toLowerCase()), 300);
+    return () => clearTimeout(t);
+  }, [query]);
+
+  const filtered = useMemo(() => {
+    if (!debouncedQuery) return closedTransactions;
+    const terms = debouncedQuery.split(/\s+/).filter(Boolean);
+    return closedTransactions.filter((item: any) => {
+      const searchable = [
+        item.title,
+        item.name,
+        item.location,
+        item.address,
+        item.description,
+        item.industry,
+        item.type,
+        item.tags && Array.isArray(item.tags) ? item.tags.join(" ") : item.tags,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      return terms.every((t) => searchable.includes(t));
+    });
+  }, [closedTransactions, debouncedQuery]);
 
   if (isLoading) {
     return (
@@ -53,7 +84,7 @@ const ClosedTransactions = () => {
               Discover our track record of successful commercial real estate deals across the region
             </p>
           </div>
-          
+
           {/* Success Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 max-w-4xl mx-auto">
             <div className="bg-card p-6 rounded-lg border border-border text-center">
@@ -73,25 +104,44 @@ const ClosedTransactions = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Search + Info */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+          <div className="relative w-full sm:max-w-lg">
+            <Input
+              value={query}
+              onChange={(e: any) => setQuery(e.target.value)}
+              placeholder="Search closed transactions by title, location, industry, tags..."
+              className="pr-10"
+            />
+            <Search className="absolute right-10 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            {query && (
+              <button
+                aria-label="clear search"
+                onClick={() => setQuery("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+
+          <p className="text-muted-foreground">
+            {filtered.length} {filtered.length === 1 ? "transaction" : "recent transactions"}
+          </p>
+        </div>
 
         {/* Transactions Section */}
         <div className="space-y-8">
-          <div className="flex justify-between items-center">
-            <p className="text-muted-foreground">
-              {closedTransactions.length} {closedTransactions.length === 1 ? "transaction" : "recent transactions"}
-            </p>
-          </div>
-
-          {closedTransactions.length === 0 ? (
+          {filtered.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-lg text-muted-foreground mb-4">No closed transactions to display at this time.</p>
+              <p className="text-lg text-muted-foreground mb-4">No closed transactions match your search.</p>
               <Button variant="outline" asChild>
                 <Link to="/contact">Contact Us</Link>
               </Button>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {closedTransactions.map((property) => (
+              {filtered.map((property: any) => (
                 <PropertyCard key={property.id} {...property} />
               ))}
             </div>

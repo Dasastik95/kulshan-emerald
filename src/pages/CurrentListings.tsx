@@ -1,12 +1,44 @@
 import { Link } from "react-router-dom";
-import { Filter, Loader2, AlertCircle } from "lucide-react";
+import { Filter, Loader2, AlertCircle, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import PropertyCard from "@/components/PropertyCard";
 import { useListings } from "@/hooks/useListings";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useEffect, useMemo, useState } from "react";
 
 const CurrentListings = () => {
   const { data: currentListings = [], isLoading, isError, error } = useListings();
+  const [query, setQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+
+  // debounce query
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedQuery(query.trim().toLowerCase()), 300);
+    return () => clearTimeout(t);
+  }, [query]);
+
+  const filtered = useMemo(() => {
+    if (!debouncedQuery) return currentListings;
+    const terms = debouncedQuery.split(/\s+/).filter(Boolean);
+    return currentListings.filter((item: any) => {
+      const searchable = [
+        item.title,
+        item.name,
+        item.location,
+        item.address,
+        item.description,
+        item.industry,
+        item.type,
+        item.tags && Array.isArray(item.tags) ? item.tags.join(" ") : item.tags,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      return terms.every((t) => searchable.includes(t));
+    });
+  }, [currentListings, debouncedQuery]);
 
   if (isLoading) {
     return (
@@ -57,40 +89,52 @@ const CurrentListings = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Search + Controls */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+          <div className="flex items-center gap-2 w-full sm:max-w-lg">
+            <div className="relative w-full">
+              <Input
+                value={query}
+                onChange={(e: any) => setQuery(e.target.value)}
+                placeholder="Search by title, location, industry, tags..."
+                className="pr-10"
+              />
+              <Search className="absolute right-10 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              {query && (
+                <button
+                  aria-label="clear search"
+                  onClick={() => setQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+          </div>
 
-        {/* B2B Business Broker Listings Link */}
-        <div className="mb-8 p-6 bg-accent rounded-lg border border-border">
-          <h3 className="text-lg font-semibold mb-2">Looking for Business Opportunities?</h3>
-          <p className="text-muted-foreground mb-4">
-            Explore our business brokerage listings and discover acquisition opportunities.
-          </p>
-          <Button variant="outline" asChild>
-            <Link to="/business-brokerage">View Business Listings</Link>
-          </Button>
-        </div>
-
-        {/* Listings Section */}
-        <div className="space-y-8">
-          <div className="flex justify-between items-center">
-            <p className="text-muted-foreground">
-              {currentListings.length} {currentListings.length === 1 ? "property" : "properties"} available
+          <div className="flex items-center gap-3">
+            <p className="text-muted-foreground font-bold text-black/70">
+              {filtered.length} {filtered.length === 1 ? "property" : "properties"}
             </p>
             <Button variant="outline" size="sm">
               <Filter className="h-4 w-4 mr-2" />
               Filters
             </Button>
           </div>
+        </div>
 
-          {currentListings.length === 0 ? (
+        {/* Listings Section */}
+        <div className="space-y-8">
+          {filtered.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-lg text-muted-foreground mb-4">No listings available at this time.</p>
+              <p className="text-lg text-muted-foreground mb-4">No listings match your search.</p>
               <Button variant="outline" asChild>
                 <Link to="/contact">Contact Us</Link>
               </Button>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {currentListings.map((property) => (
+              {filtered.map((property: any) => (
                 <PropertyCard key={property.id} {...property} />
               ))}
             </div>
