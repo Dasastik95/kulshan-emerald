@@ -74,7 +74,7 @@ const Home = () => {
             </div>
             <div className="space-y-2">
               <Award className="h-12 w-12 mx-auto" />
-              <div className="text-4xl font-bold">25+</div>
+              <div className="text-4xl font-bold">40+</div>
               <div className="text-primary-foreground/90">Years Experience</div>
             </div>
             <div className="space-y-2">
@@ -102,7 +102,7 @@ const Home = () => {
                 <Award className="h-6 w-6 text-primary" />
               </div>
               <h3 className="text-xl font-bold mb-2">Local Expertise</h3>
-              <p className="text-muted-foreground">Deep knowledge of the Pacific Northwest commercial real estate market with 25+ years of experience</p>
+              <p className="text-muted-foreground">Deep knowledge of the Pacific Northwest commercial real estate market with 40+ years of experience</p>
             </div>
             
             <div className="bg-card p-6 rounded-lg border border-border hover:shadow-lg transition-shadow">
@@ -241,8 +241,8 @@ const Home = () => {
             >
               <CarouselContent>
                 {displayedListings.map((property) => (
-                  <CarouselItem key={property.id} className="md:basis-1/3 lg:basis-1/4">
-                    <div className="p-1">
+                  <CarouselItem key={property.id} className="md:basis-1/2 lg:basis-1/3">
+                    <div className="h-[420px] p-1">
                       <PropertyCard {...property} />
                     </div>
                   </CarouselItem>
@@ -296,8 +296,8 @@ const Home = () => {
             >
               <CarouselContent>
                 {displayedDeals.map((property) => (
-                  <CarouselItem key={property.id} className="md:basis-1/3 lg:basis-1/4">
-                    <div className="p-1">
+                  <CarouselItem key={property.id} className="md:basis-1/2 lg:basis-1/3">
+                    <div className="h-[420px] p-1">
                       <PropertyCard {...property} />
                     </div>
                   </CarouselItem>
