@@ -26,27 +26,40 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-[70vh] min-h-[600px] flex items-center justify-center overflow-hidden">
+      <section className="relative h-[80vh] min-h-[700px] flex items-center justify-center overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${heroImage})` }}
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-neutral-900/90 to-neutral-900/50" />
+          <div className="absolute inset-0 bg-gradient-to-r from-neutral-900/95 via-neutral-900/85 to-neutral-900/60" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+          <div className="inline-block mb-4 px-4 py-2 bg-primary/20 border border-primary/30 rounded-full">
+            <span className="text-sm font-semibold text-primary-foreground">Serving the Pacific Northwest Since 2008</span>
+          </div>
           <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
             Real Estate <span className="text-primary">Elevated</span>
           </h1>
-          <p className="text-xl md:text-2xl mb-8 text-neutral-100 max-w-3xl mx-auto">
-            Premier commercial real estate and business brokerage services
+          <p className="text-xl md:text-2xl mb-4 text-neutral-100 max-w-3xl mx-auto leading-relaxed">
+            Premier commercial real estate and business brokerage services delivering results that exceed expectations
           </p>
-          <Button size="lg" className="text-lg h-14 px-8" asChild>
-            <Link to="/contact">
-              Get Started
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
-          </Button>
+          <p className="text-lg md:text-xl mb-8 text-neutral-200/90 max-w-2xl mx-auto">
+            Expert guidance • Local market knowledge • Proven track record
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <Button size="lg" className="text-lg h-14 px-8" asChild>
+              <Link to="/contact">
+                Get Started
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" className="text-lg h-14 px-8 bg-white/10 border-white/30 text-white hover:bg-white/20" asChild>
+              <Link to="/listings/current">
+                View Properties
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
 
@@ -73,18 +86,117 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Why Choose Us Section */}
+      <section className="py-20 bg-gradient-to-br from-background via-accent/30 to-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">Why Choose Kulshan Commercial</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              We combine local expertise with proven strategies to deliver exceptional results for our clients
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="bg-card p-6 rounded-lg border border-border hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                <Award className="h-6 w-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Local Expertise</h3>
+              <p className="text-muted-foreground">Deep knowledge of the Pacific Northwest commercial real estate market with 25+ years of experience</p>
+            </div>
+            
+            <div className="bg-card p-6 rounded-lg border border-border hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                <Users className="h-6 w-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Client-Focused</h3>
+              <p className="text-muted-foreground">Personalized service tailored to your unique goals with dedicated support throughout the process</p>
+            </div>
+            
+            <div className="bg-card p-6 rounded-lg border border-border hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                <TrendingUp className="h-6 w-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Proven Results</h3>
+              <p className="text-muted-foreground">$500M+ in successful transactions with a track record of maximizing value for clients</p>
+            </div>
+            
+            <div className="bg-card p-6 rounded-lg border border-border hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                <Award className="h-6 w-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Full-Service</h3>
+              <p className="text-muted-foreground">From valuation to closing, we handle every aspect of your commercial real estate transaction</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
-      <section className="py-14 bg-accent">
+      <section className="py-16 bg-gradient-to-r from-primary to-primary/90 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold mb-6">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">
             What is your real estate worth today?
           </h2>
-          <p className="text-xl text-muted-foreground mb-8">
-            Get a professional valuation and discover your property's true potential
+          <p className="text-xl text-primary-foreground/90 mb-8 leading-relaxed">
+            Get a professional valuation and discover your property's true potential. Our experienced team will provide you with a comprehensive market analysis and strategic guidance.
           </p>
-          <Button size="lg" className="text-lg h-14 px-8" asChild>
-            <Link to="/contact">Let's Talk About It</Link>
+          <Button size="lg" variant="secondary" className="text-lg h-14 px-8" asChild>
+            <Link to="/contact">Schedule a Free Consultation</Link>
           </Button>
+        </div>
+      </section>
+
+      {/* Services Overview */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">Our Services</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Comprehensive commercial real estate solutions tailored to your needs
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-card p-8 rounded-lg border-2 border-border hover:border-primary/50 transition-all hover:shadow-xl">
+              <h3 className="text-2xl font-bold mb-4">Investment Sales</h3>
+              <p className="text-muted-foreground mb-6">
+                Expert representation for buyers and sellers of commercial investment properties including apartments, retail, office, and industrial assets.
+              </p>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Market analysis & valuation</li>
+                <li>• Strategic marketing campaigns</li>
+                <li>• Buyer/seller representation</li>
+                <li>• Transaction coordination</li>
+              </ul>
+            </div>
+
+            <div className="bg-card p-8 rounded-lg border-2 border-border hover:border-primary/50 transition-all hover:shadow-xl">
+              <h3 className="text-2xl font-bold mb-4">Business Brokerage</h3>
+              <p className="text-muted-foreground mb-6">
+                Confidential business sales services helping owners maximize value and ensuring smooth transitions for both buyers and sellers.
+              </p>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Business valuation services</li>
+                <li>• Confidential marketing</li>
+                <li>• Buyer qualification & vetting</li>
+                <li>• Deal structuring & negotiation</li>
+              </ul>
+            </div>
+
+            <div className="bg-card p-8 rounded-lg border-2 border-border hover:border-primary/50 transition-all hover:shadow-xl">
+              <h3 className="text-2xl font-bold mb-4">Advisory Services</h3>
+              <p className="text-muted-foreground mb-6">
+                Strategic guidance and market insights to help you make informed decisions about your commercial real estate investments.
+              </p>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Market research & analysis</li>
+                <li>• Investment strategy consulting</li>
+                <li>• Portfolio optimization</li>
+                <li>• Development feasibility</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -144,7 +256,7 @@ const Home = () => {
       </section>
 
       {/* Closed Transactions Slideshow */}
-      <section className="py-20 bg-secondary">
+      <section className="py-20 bg-gradient-to-br from-secondary via-accent/20 to-secondary">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-end mb-12">
             <div>

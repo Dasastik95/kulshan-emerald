@@ -5,6 +5,25 @@ import team3 from "@/assets/team-3.jpg";
 import team4 from "@/assets/team-4.jpg";
 
 const Team = () => {
+  const values = [
+    {
+      title: "Integrity",
+      description: "We conduct business with the highest ethical standards and transparency"
+    },
+    {
+      title: "Local Expertise",
+      description: "Deep market knowledge and established relationships throughout the Pacific Northwest"
+    },
+    {
+      title: "Client Success",
+      description: "Your goals are our priority, and we're committed to delivering exceptional results"
+    },
+    {
+      title: "Professional Excellence",
+      description: "Continuous education and adherence to industry best practices"
+    }
+  ];
+
   const teamMembers = [
     {
       name: "Allen Stockbridge",
@@ -41,14 +60,46 @@ const Team = () => {
   ];
 
   return (
-    <div className="min-h-screen py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold mb-4">Meet Our Team</h1>
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <div className="relative bg-gradient-to-br from-primary/10 via-accent/50 to-background pt-20 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-block mb-4 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full">
+            <span className="text-sm font-semibold text-primary">Commercial Real Estate Experts</span>
+          </div>
+          <h1 className="text-5xl md:text-6xl font-bold mb-6">Meet Our Team</h1>
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            Experienced professionals with over 25 years of combined expertise in commercial real estate and business brokerage
+          </p>
+        </div>
+      </div>
+
+      {/* Company Values */}
+      <section className="py-16 bg-secondary">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Values</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              The principles that guide everything we do
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {values.map((value, index) => (
+              <div key={index} className="bg-card p-6 rounded-lg border border-border text-center hover:shadow-lg transition-shadow">
+                <h3 className="text-xl font-bold mb-2 text-primary">{value.title}</h3>
+                <p className="text-sm text-muted-foreground">{value.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Team Members */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="mb-12 text-center">
+          <h2 className="text-4xl font-bold mb-4">Leadership Team</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Experienced professionals dedicated to elevating your commercial real estate and
-            business brokerage experience
+            Dedicated professionals with deep market knowledge and a commitment to your success
           </p>
         </div>
 
