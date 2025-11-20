@@ -283,13 +283,13 @@ const ListingDetails = () => {
 
               {/* CTA buttons - improved styling */}
               <div className="flex flex-col sm:flex-row gap-3">
-                <Button asChild size="md" className="w-full sm:w-auto px-6 py-3 rounded-md shadow">
+                <Button asChild size="default" className="w-full sm:w-auto px-6 py-3 rounded-md shadow">
                   <a href="/contact" className="block text-center font-semibold">
                     Request Info
                   </a>
                 </Button>
 
-                <Button variant="outline" asChild size="md" className="w-full sm:w-auto px-6 py-3 rounded-md">
+                <Button variant="outline" asChild size="default" className="w-full sm:w-auto px-6 py-3 rounded-md">
                   <a href="/nda" className="block text-center font-semibold">
                     Sign NDA
                   </a>

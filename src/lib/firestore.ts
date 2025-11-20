@@ -58,38 +58,18 @@ const formatSize = (size: any): string => {
 const convertFirestoreDocToListing = (doc: QueryDocumentSnapshot<DocumentData>): Listing => {
   const data = doc.data();
   
-  // Try to get price from various fields
-  const rawPrice = data.price || data.priceFormatted || data.priceAmount || data.value;
-  const price = formatPrice(rawPrice);
-  
-  // Try to get size from various fields
-  const rawSize = data.size || data.sizeFormatted || data.squareFeet || data.area;
-  const size = formatSize(rawSize);
-  
-  // Try to get image from various fields
-  const image = data.image || data.imageUrl || data.photo || data.thumbnail || data.imageURL || "";
-  
+  // Return all fields from database, keeping original field names
   return {
     id: doc.id,
     title: data.title || data.name || data.propertyName || "Untitled Property",
     location: data.location || data.address || data.city || data.locationName || "Location not specified",
-    price: price,
-    type: data.type || data.propertyType || data.category || "Commercial",
-    size: size,
-    image: image,
+    price: data.price || data.askingPrice || data.priceFormatted || data.priceAmount || data.value || "",
+    type: data.type || data.industry || data.propertyType || data.category || "Commercial",
+    size: data.size || data.sizeFormatted || data.squareFeet || data.area || "",
+    image: data.image || data.imageUrl || data.photo || data.thumbnail || data.imageURL || "",
     status: data.status || "available",
-    description: data.description || data.details,
-    createdAt: data.createdAt,
-    updatedAt: data.updatedAt,
-    // Include any other fields
-    ...Object.fromEntries(
-      Object.entries(data).filter(([key]) => 
-        !["title", "name", "propertyName", "location", "address", "city", "locationName", 
-          "price", "priceFormatted", "priceAmount", "value", "size", "sizeFormatted", 
-          "squareFeet", "area", "type", "propertyType", "category", "image", "imageUrl", 
-          "photo", "thumbnail", "imageURL", "status", "description", "details"].includes(key)
-      )
-    ),
+    // Include ALL other fields from database
+    ...data,
   };
 };
 
