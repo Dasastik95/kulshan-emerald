@@ -28,34 +28,46 @@ const Team = () => {
     {
       name: "Allen Stockbridge",
       title: "Managing Broker",
+      company: "Kulshan Commercial Investment Real Estate, LLC",
       bio: "Allen Stockbridge is managing broker and founder of Kulshan Commercial Investment Real Estate, LLC. Since founding the company in 2008, Allen has been active in representing buyers and sellers of investment properties, and is dedicated to providing quality service, ethics, and local market knowledge for the benefit of clients. Allen is committed to helping investors achieve their goals through effective acquisition and disposition strategies, and has developed relationships with investors, private clients and institutions in the Pacific NW and throughout the US. Allen is the state designated real estate broker for Pacific County, Washington, and his practice has included the successful sale of apartments, office and retail properties, manufactured housing communities, and hospitality projects. Allen is a member of the Commercial Brokers Association (CBA), and has an MBA from Western Washington University.",
       image: team1,
       email: "astockbridge@kulshan.com",
       phone: "(360) 555-0101",
+      website: "#",
+      linkedin: "#"
     },
     {
       name: "James Browder",
       title: "Broker",
+      company: "Kulshan Commercial",
       bio: "James Browder is a broker with Kulshan Commercial, having joined the team in 2018 after a successful career at Browder Real Estate Services. James has represented clients in dozens of business and real estate transactions throughout Whatcom, Skagit and Island Counties, focusing on land, multi-family, industrial, and business brokerage. He is experienced in working with developers, business owners, and land investors at every stage of the investment cycle. James is active in the Commercial Brokers Association and a lifetime Bellingham resident.",
       image: team2,
       email: "jbrowder@kulshan.com",
       phone: "(360) 555-0102",
+      website: "#",
+      linkedin: "#"
     },
     {
       name: "Ben Nardi",
       title: "Broker",
+      company: "Kulshan Commercial",
       bio: "Ben Nardi is a broker at Kulshan Commercial. Ben started with the firm in 2012, bringing prior experience in investment property sales and residential property management. He has since represented clients in apartment investments, mobile home parks, and mixed-use development projects. Ben has a strong background in environmental regulations and project management, and is committed to client success in every transaction. Ben holds a BA in Geography from Western Washington University.",
       image: team3,
       email: "bnardi@kulshan.com",
       phone: "(360) 555-0103",
+      website: "#",
+      linkedin: "#"
     },
     {
       name: "Dick Obendorf",
       title: "Senior Advisor",
+      company: "Kulshan Commercial",
       bio: "Dick brings decades of wisdom and experience to our team, having been involved in commercial real estate since 1975. His mentorship and strategic insight continue to guide both our team and clients through the most complex transactions and market conditions.",
       image: team4,
       email: "dobendorf@kulshan.com",
       phone: "(360) 555-0104",
+      website: "#",
+      linkedin: "#"
     },
   ];
 
@@ -104,27 +116,38 @@ const Team = () => {
         </div>
 
         {/* Team Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {teamMembers.map((member, index) => (
-            <div key={index} className="bg-white border border-neutral-200 rounded-lg p-8 text-center hover:shadow-lg transition-shadow">
+            <div key={index} className="bg-white rounded-lg p-8 text-center hover:shadow-lg transition-shadow border border-border">
               <div className="mb-6 flex justify-center">
                 <img 
                   src={member.image} 
                   alt={member.name}
-                  className="w-32 h-32 rounded-full object-cover"
+                  className="w-40 h-40 rounded-full object-cover"
                 />
               </div>
-              <h3 className="text-xl font-bold mb-2">{member.name}</h3>
-              <p className="text-primary font-semibold mb-4">{member.title}</p>
-              <p className="text-muted-foreground text-sm mb-6 line-clamp-4">
+              <h3 className="text-2xl font-bold mb-2 text-foreground">{member.name}</h3>
+              <p className="text-lg font-semibold mb-3 text-foreground">{member.title}</p>
+              <p className="text-sm text-muted-foreground mb-6">{member.company}</p>
+              <p className="text-base text-foreground leading-relaxed mb-6">
                 {member.bio}
               </p>
-              <div className="flex justify-center gap-4 text-sm">
-                <a href={`mailto:${member.email}`} className="text-primary hover:underline">
-                  Email
+              <div className="flex justify-center gap-4">
+                <a 
+                  href={member.website} 
+                  className="text-foreground hover:text-primary underline font-medium"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Website
                 </a>
-                <a href={`tel:${member.phone}`} className="text-primary hover:underline">
-                  Phone
+                <a 
+                  href={member.linkedin} 
+                  className="text-foreground hover:text-primary underline font-medium"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  LinkedIn
                 </a>
               </div>
             </div>
