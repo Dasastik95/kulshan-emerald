@@ -190,7 +190,7 @@ const PropertyCard = ({
       <div className="mt-auto p-6 pt-4 grid grid-cols-2 gap-3 border-t border-border/50">
         {id ? (
           <Button asChild className="w-full" size="default">
-            <Link to={isPrevious ? `/listings/closed/${id}` : `/listings/${id}`}>
+            <Link to="/contact">
               <span>Request Information</span>
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>

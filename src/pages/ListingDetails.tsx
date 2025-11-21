@@ -8,7 +8,7 @@ import {
   Users,
 } from "lucide-react";
 import { useListings } from "@/hooks/useListings";
-import { fetchListingById } from "@/lib/firestore";
+import { fetchListingById, fetchPreviousDealById } from "@/lib/firestore";
 import ImageCarousel from "@/components/ImageCarousel";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -79,9 +79,31 @@ const ListingDetails = () => {
       setLoading(true);
       setError(null);
       try {
-        const doc = await fetchListingById(String(id));
+        // try current listings first
+        let doc = await fetchListingById(String(id));
         if (!mounted) return;
+        if (doc) {
+          console.debug("ListingDetails: found listing in 'listings' collection", { id });
+        }
+
+        // If not found in listings, try previous-deals (closed transactions)
         if (!doc) {
+          try {
+            const prev = await fetchPreviousDealById(String(id));
+            if (!mounted) return;
+            if (prev) {
+              doc = prev;
+              console.debug("ListingDetails: found listing in 'previous-deals' collection", { id });
+            } else {
+              console.debug("ListingDetails: not found in 'previous-deals'", { id });
+            }
+          } catch (err) {
+            console.error("ListingDetails: error fetching previous-deal", err);
+          }
+        }
+
+        if (!doc) {
+          console.debug("ListingDetails: final result - not found", { id });
           setError("Listing not found.");
           setListing(null);
         } else {

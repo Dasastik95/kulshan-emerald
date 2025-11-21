@@ -25,7 +25,7 @@ const ClosedTransactions = () => {
         item.name,
         item.location,
         item.address,
-        item.description,
+        
         item.industry,
         item.type,
         item.tags && Array.isArray(item.tags) ? item.tags.join(" ") : item.tags,
@@ -39,6 +39,16 @@ const ClosedTransactions = () => {
   }, [closedTransactions, debouncedQuery]);
 
   const displayed = filtered.slice(0, 20);
+
+  // debug: log ids of displayed properties
+  useEffect(() => {
+    try {
+      const ids = displayed.map((p: any) => p.id ?? p._id ?? p.docId ?? null);
+      console.debug("ClosedTransactions: displayed ids", ids);
+    } catch (e) {
+      // ignore
+    }
+  }, [displayed]);
 
   return (
     <div className="min-h-screen">
@@ -81,8 +91,8 @@ const ClosedTransactions = () => {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {displayed.map((property: any) => (
-              <div key={property.id} className="w-full">
-                <PropertyCard {...property} />
+              <div key={property.id ?? property._id ?? property.docId} className="w-full">
+                <PropertyCard {...property} id={property.id ?? property._id ?? property.docId} previous />
               </div>
             ))}
           </div>

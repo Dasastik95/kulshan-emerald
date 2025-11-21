@@ -1,56 +1,96 @@
-import { Link } from "react-router-dom";
-import { Filter, Loader2, AlertCircle, Search, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import PropertyCard from "@/components/PropertyCard";
+import React, { useEffect, useState } from "react";
+// framer-motion removed to avoid adding new dependency; use simple elements instead
+import { Search, MapPin, Users, DollarSign, TrendingUp, ArrowRight, Download, Loader2 } from "lucide-react";
 import { useListings } from "@/hooks/useListings";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { useEffect, useMemo, useState } from "react";
 
-const CurrentListings = () => {
-  const { data: currentListings = [], isLoading, isError, error } = useListings();
-  const [query, setQuery] = useState("");
-  const [debouncedQuery, setDebouncedQuery] = useState("");
+const CurrentListings: React.FC = () => {
+  const { data: listings = [], isLoading, isError, error } = useListings();
+  const [isOpen, setIsOpen] = useState(false);
+  const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
+  const [selectedListing, setSelectedListing] = useState<any | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedIndustry, setSelectedIndustry] = useState("all");
+  const [selectedLocation, setSelectedLocation] = useState("all");
+  const [allListings, setAllListings] = useState<any[]>([]);
 
-  // debounce query
   useEffect(() => {
-    const t = setTimeout(() => setDebouncedQuery(query.trim().toLowerCase()), 300);
-    return () => clearTimeout(t);
-  }, [query]);
+    setAllListings(listings || []);
+  }, [listings]);
 
-  const filtered = useMemo(() => {
-    if (!debouncedQuery) return currentListings;
-    const terms = debouncedQuery.split(/\s+/).filter(Boolean);
-    return currentListings.filter((item: any) => {
-      const searchable = [
-        item.title,
-        item.name,
-        item.location,
-        item.address,
-        item.description,
-        item.industry,
-        item.type,
-        item.tags && Array.isArray(item.tags) ? item.tags.join(" ") : item.tags,
-      ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-      return terms.every((t) => searchable.includes(t));
-    });
-  }, [currentListings, debouncedQuery]);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: "7479fcc1-3404-4173-8e61-6812306a7547",
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          subject: `Business Listing Inquiry: ${selectedListing?.title || "General Inquiry"}`,
+          listing_name: selectedListing?.title || "N/A",
+          listing_industry: selectedListing?.industry || "N/A",
+          listing_price: selectedListing?.askingPrice || "N/A",
+          redirect: "",
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        alert("Form submitted successfully!");
+        setIsOpen(false);
+        setFormData({ name: "", email: "", phone: "" });
+      } else {
+        alert("Failed to submit the form. Please try again.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("An error occurred while submitting the form.");
+    }
+  };
+
+  const handleDownloadFlyer = async (listing: any) => {
+    if (!listing?.flyerUrl) return;
+    try {
+      const response = await fetch(listing.flyerUrl);
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = objectUrl;
+      link.download = listing.title ? `${listing.title}-flyer.pdf` : "flyer.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(objectUrl);
+    } catch (err) {
+      console.error("Error downloading flyer:", err);
+      window.open(listing.flyerUrl, "_blank");
+    }
+  };
+
+  const industries = Array.from(new Set(allListings.map((l: any) => l.industry || ""))).filter(Boolean);
+  const locations = Array.from(new Set(allListings.map((l: any) => l.location || ""))).filter(Boolean);
+
+  const filteredListings = allListings.filter((listing: any) => {
+    const matchesSearch =
+      (listing.title || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (listing.industry || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (listing.description || "").toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesIndustry = selectedIndustry === "all" || listing.industry === selectedIndustry;
+    const matchesLocation = selectedLocation === "all" || listing.location === selectedLocation;
+    return matchesSearch && matchesIndustry && matchesLocation;
+  });
 
   if (isLoading) {
     return (
-      <div className="min-h-screen py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-center min-h-[60vh]">
-            <div className="text-center">
-              <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
-              <p className="text-muted-foreground">Loading listings...</p>
-            </div>
-          </div>
-        </div>
+      <div className="min-h-screen flex items-center justify-center py-24">
+        <Loader2 className="h-10 w-10 animate-spin text-primary" />
+        <span className="ml-3 text-muted-foreground">Loading listings...</span>
       </div>
     );
   }
@@ -58,105 +98,121 @@ const CurrentListings = () => {
   if (isError) {
     return (
       <div className="min-h-screen py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Alert variant="destructive" className="mb-8">
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>
-              {error?.message || "Failed to load listings. Please try again later."}
-            </AlertDescription>
-          </Alert>
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="text-center">
+            <h2 className="text-2xl font-semibold text-destructive">Failed to load listings</h2>
+            <p className="text-muted-foreground mt-2">{(error as any)?.message || "Please try again later."}</p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-primary/10 via-accent/50 to-background pt-20 pb-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <div className="inline-block mb-4 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full">
-              <span className="text-sm font-semibold text-primary">Investment Opportunities</span>
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold mb-4">Current Listings</h1>
-            <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto">
-              Explore our curated selection of commercial investment properties across the Pacific Northwest
-            </p>
-          </div>
+    <div className="min-h-screen pt-20">
+      <section className="section-padding bg-gradient-to-br from-primary/10 via-accent/30 to-background">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">Current Business Listings</h1>
+          <p className="text-lg text-muted-foreground mb-8">Explore opportunities to acquire established, profitable businesses across various industries. All listings are confidential and pre-qualified.</p>
         </div>
-      </div>
+      </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Search + Controls */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-          <div className="flex items-center gap-2 w-full sm:max-w-lg">
-            <div className="relative w-full">
-              <Input
-                value={query}
-                onChange={(e: any) => setQuery(e.target.value)}
-                placeholder="Search by title, location, industry, tags..."
-                className="pr-10"
-              />
-              <Search className="absolute right-10 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              {query && (
-                <button
-                  aria-label="clear search"
-                  onClick={() => setQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              )}
-            </div>
+      <section className="py-8 bg-muted border-b border-border">
+        <div className="container-width flex flex-col lg:flex-row gap-6">
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <input className="w-full pl-10 pr-4 py-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" type="text" placeholder="Search businesses..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
           </div>
 
-          <div className="flex items-center gap-3">
-            <p className="text-muted-foreground font-bold text-black/70">
-              {filtered.length} {filtered.length === 1 ? "property" : "properties"}
-            </p>
-            <Button variant="outline" size="sm">
-              <Filter className="h-4 w-4 mr-2" />
-              Filters
-            </Button>
+          <div className="flex gap-4">
+            <select value={selectedIndustry} onChange={(e) => setSelectedIndustry(e.target.value)} className="px-4 py-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"><option value="all">All Industries</option>{industries.map((industry) => (<option key={industry} value={industry}>{industry}</option>))}</select>
+
+            <select value={selectedLocation} onChange={(e) => setSelectedLocation(e.target.value)} className="px-4 py-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"><option value="all">All Locations</option>{locations.map((location) => (<option key={location} value={location}>{location}</option>))}</select>
           </div>
         </div>
 
-        {/* Listings Section */}
-        <div className="space-y-8">
-          {filtered.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-lg text-muted-foreground mb-4">No listings match your search.</p>
-              <Button variant="outline" asChild>
-                <Link to="/contact">Contact Us</Link>
-              </Button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-              {filtered.map((property: any) => (
-                <PropertyCard key={property.id} {...property} />
-              ))}
-            </div>
-          )}
-        </div>
+        <div className="mt-4 ml-10 text-muted-foreground">Showing {filteredListings.length} of {allListings.length} businesses</div>
+      </section>
 
-        {/* CTA Section */}
-        <div className="mt-16 p-12 bg-gradient-to-r from-primary to-primary/90 text-white rounded-lg text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Make a Move?</h2>
-          <p className="text-xl mb-6 text-primary-foreground/90 max-w-2xl mx-auto leading-relaxed">
-            Connect with our experienced team to discuss your commercial real estate investment goals. We're here to help you find the perfect property.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" asChild>
-              <Link to="/contact">Schedule Consultation</Link>
-            </Button>
-            <Button size="lg" variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20" asChild>
-              <Link to="/team">Meet Our Team</Link>
-            </Button>
+      <section className="section-padding">
+        <div className="container-width">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8 items-stretch">
+            {filteredListings.length === 0 && (
+              <div className="text-center py-16 col-span-2">
+                <h3 className="text-xl sm:text-2xl font-semibold text-primary mb-4">No listings found</h3>
+                <p className="text-muted-foreground mb-8 text-sm sm:text-base">Try adjusting your search criteria or browse all listings.</p>
+              </div>
+            )}
+
+            {filteredListings.length > 0 && filteredListings.map((listing: any) => (
+              <div key={listing.id ?? listing._id ?? listing.docId} className={`p-6 bg-white rounded-xl shadow-sm border border-transparent hover:border-slate-200 transition-colors`}>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+                  <div>
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h3 className="text-2xl lg:text-2xl font-bold text-slate-900 leading-tight">{listing.title}</h3>
+                        <div className="text-sm text-slate-500 mt-1">{listing.industry}</div>
+                      </div>
+                      <div className="text-right ml-6">
+                        <div className="text-3xl md:text-4xl lg:text-4xl font-extrabold text-slate-900">{listing.askingPrice ?? '---'}</div>
+                        <div className="text-sm text-slate-400">Asking Price</div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4 text-slate-600">
+                      <div className="flex items-start gap-3"><DollarSign className="h-4 w-4 text-slate-400 mt-1" /><div><div className="font-medium">{listing.revenue ?? '---'}</div><div className="text-xs text-slate-400">Revenue</div></div></div>
+                      <div className="flex items-start gap-3"><TrendingUp className="h-4 w-4 text-slate-400 mt-1" /><div><div className="font-medium text-emerald-700">{listing.growth ?? '---'}</div><div className="text-xs text-slate-400">Growth</div></div></div>
+                      <div className="flex items-start gap-3"><Users className="h-4 w-4 text-slate-400 mt-1" /><div><div className="font-medium">{listing.employees ?? '---'}</div><div className="text-xs text-slate-400">Employees</div></div></div>
+                      <div className="flex items-start gap-3"><MapPin className="h-4 w-4 text-slate-400 mt-1" /><div><div className="font-medium">{listing.location ?? '---'}</div><div className="text-xs text-slate-400">Location</div></div></div>
+                    </div>
+
+                    <p className="text-slate-600 mb-6">{listing.description}</p>
+
+                    <h4 className="font-semibold text-slate-900 mb-3">Key Highlights</h4>
+                    <div className="flex flex-wrap gap-3 mb-6">
+                      {(Array.isArray(listing.highlights) ? listing.highlights : []).map((highlight: any, i: number) => (
+                        <span key={i} className="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-sm">{highlight.text ?? highlight}</span>
+                      ))}
+                    </div>
+
+                    <div className="flex gap-4 mt-8">
+                      <button onClick={() => { setSelectedListing(listing); setIsOpen(true); }} className="flex-1 bg-[#071b34] text-white py-4 rounded-2xl text-lg font-semibold shadow-md">Request Information <span className="ml-3">→</span></button>
+                      <button onClick={() => handleDownloadFlyer(listing)} className="flex-1 bg-[#071b34] text-white py-4 rounded-2xl text-lg font-semibold shadow-md">Download Flyer <span className="ml-3">⤓</span></button>
+                    </div>
+                  </div>
+
+                  {/* price moved into the header column */}
+                  <div className="hidden lg:block" />
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
+      </section>
+
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white p-6 rounded-lg w-full max-w-md relative">
+            <button onClick={() => setIsOpen(false)} className="absolute top-3 right-3 text-gray-500 hover:text-gray-700">✕</button>
+            <h2 className="text-xl font-semibold mb-4">Request Information</h2>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Your Name *</label>
+                <input type="text" name="name" value={formData.name} onChange={handleChange} required className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Email Address *</label>
+                <input type="email" name="email" value={formData.email} onChange={handleChange} required className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Phone Number *</label>
+                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary" />
+              </div>
+              <button type="submit" className="btn-primary flex items-center justify-center mt-2">Submit <ArrowRight className="ml-2 h-4 w-4" /></button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

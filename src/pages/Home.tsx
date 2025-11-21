@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, TrendingUp, Award, Users, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PropertyCard from "@/components/PropertyCard";
+import CompactPropertyCard from "@/components/CompactPropertyCard";
 import {
   Carousel,
   CarouselContent,
@@ -35,7 +36,7 @@ const Home = () => {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
             <div className="inline-block mb-4 px-4 py-2 bg-primary/20 border border-primary/30 rounded-full">
-              <span className="text-sm font-semibold text-primary-foreground">Serving the Pacific Northwest Since 2008</span>
+              <span className="text-sm font-semibold text-primary-foreground">Serving the Pacific Northwest Since 2014</span>
             </div>
             <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
               Real Estate <span className="text-primary">Elevated</span>
@@ -158,7 +159,7 @@ const Home = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-card p-8 rounded-lg border-2 border-border hover:border-primary/50 transition-all hover:shadow-xl">
-              <h3 className="text-2xl font-bold mb-4">Investment Sales</h3>
+              <h3 className="text-2xl font-bold mb-4">Investment Property Sales</h3>
               <p className="text-muted-foreground mb-6">
                 Expert representation for buyers and sellers of commercial investment properties including apartments, retail, office, and industrial assets.
               </p>
@@ -241,8 +242,8 @@ const Home = () => {
               <CarouselContent>
                 {displayedListings.map((property) => (
                   <CarouselItem key={property.id} className="md:basis-1/2 lg:basis-1/3">
-                    <div className="h-[420px] p-1">
-                      <PropertyCard {...property} />
+                    <div className="p-1">
+                      <CompactPropertyCard {...property} />
                     </div>
                   </CarouselItem>
                 ))}
@@ -295,9 +296,9 @@ const Home = () => {
             >
               <CarouselContent>
                 {displayedDeals.map((property) => (
-                  <CarouselItem key={property.id} className="md:basis-1/2 lg:basis-1/3">
-                    <div className="h-[420px] p-1">
-                      <PropertyCard {...property} />
+                  <CarouselItem key={property.id || property._id || property.docId} className="md:basis-1/2 lg:basis-1/3">
+                    <div className="p-1">
+                      <CompactPropertyCard {...property} previous />
                     </div>
                   </CarouselItem>
                 ))}

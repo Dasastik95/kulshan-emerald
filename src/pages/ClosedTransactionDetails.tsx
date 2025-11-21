@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { MapPin, DollarSign, Building2, Calendar, Users } from "lucide-react";
-import { fetchPreviousDealById } from "@/lib/firestore";
+import { fetchPreviousDealById, fetchListingById } from "@/lib/firestore";
 import ImageCarousel from "@/components/ImageCarousel";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -46,9 +46,42 @@ const ClosedTransactionDetails = () => {
       setLoading(true);
       setError(null);
       try {
-        const doc = await fetchPreviousDealById(String(id));
+        console.debug("ClosedTransactionDetails: resolving id", { id });
+
+        // try exact id first
+        let doc = await fetchPreviousDealById(String(id));
         if (!mounted) return;
+
+        // if not found, try decoded id and a few fallbacks
         if (!doc) {
+          try {
+            const decoded = decodeURIComponent(String(id));
+            if (decoded !== id) {
+              console.debug("ClosedTransactionDetails: trying decoded id", { decoded });
+              doc = await fetchPreviousDealById(decoded);
+              if (!mounted) return;
+            }
+          } catch (e) {
+            // ignore
+          }
+        }
+
+        // If still not found, try looking in `listings` collection as a last resort
+        if (!doc) {
+          console.debug("ClosedTransactionDetails: not found in previous-deals, trying listings collection", { id });
+          try {
+            const listed = await fetchListingById(String(id));
+            if (!mounted) return;
+            if (listed) {
+              doc = listed;
+            }
+          } catch (err) {
+            console.error("ClosedTransactionDetails: error fetching from listings", err);
+          }
+        }
+
+        if (!doc) {
+          console.debug("ClosedTransactionDetails: final result - not found", { id });
           setError("Transaction not found.");
           setDeal(null);
         } else {
@@ -70,7 +103,17 @@ const ClosedTransactionDetails = () => {
   if (!id) return <div className="min-h-screen py-12">Invalid transaction id.</div>;
   if (loading) return <div className="min-h-screen py-12">Loading transaction…</div>;
   if (error) return <div className="min-h-screen py-12">{error}</div>;
-  if (!deal) return <div className="min-h-screen py-12">Transaction not found.</div>;
+  if (!deal) {
+    return (
+      <div className="min-h-screen py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-lg font-semibold mb-2">Transaction not found.</h2>
+          <p className="text-sm text-muted-foreground">Attempted id: <strong>{id}</strong></p>
+          <p className="text-sm text-muted-foreground mt-2">If this id looks different from the document id in Firestore, please check the listing record and ensure the doc id matches the URL.</p>
+        </div>
+      </div>
+    );
+  }
 
   const images: string[] =
     (Array.isArray(deal.images) && deal.images.length && deal.images) ||
