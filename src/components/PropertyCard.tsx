@@ -88,6 +88,9 @@ const PropertyCard = ({
 }: PropertyCardProps) => {
   const [imageError, setImageError] = useState(false);
 
+  // If this card represents a previous deal, route to closed listing paths
+  const isPrevious = rest.previous === true || status === "sold";
+
   // Determine price to display
   const displayPrice = formatPriceValue(askingPrice || price || soldPrice);
   
@@ -185,18 +188,44 @@ const PropertyCard = ({
 
       {/* Action Buttons */}
       <div className="mt-auto p-6 pt-4 grid grid-cols-2 gap-3 border-t border-border/50">
-        <Button asChild className="w-full" size="default">
-          <Link to={`/listings/${id}`}>
-            <span>Request Information</span>
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Link>
-        </Button>
-        <Button variant="outline" asChild className="w-full" size="default">
-          <Link to={`/listings/${id}`}>
-            <Download className="mr-2 h-4 w-4" />
-            <span>Download Flyer</span>
-          </Link>
-        </Button>
+        {id ? (
+          <Button asChild className="w-full" size="default">
+            <Link to={isPrevious ? `/listings/closed/${id}` : `/listings/${id}`}>
+              <span>Request Information</span>
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+        ) : (
+          <Button asChild className="w-full" size="default">
+            <Link to="/contact">
+              <span>Request Information</span>
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+        )}
+
+        {rest.flyerUrl ? (
+          <Button variant="outline" asChild className="w-full" size="default">
+            <a href={rest.flyerUrl} target="_blank" rel="noreferrer">
+              <Download className="mr-2 h-4 w-4" />
+              <span>Download Flyer</span>
+            </a>
+          </Button>
+        ) : id ? (
+          <Button variant="outline" asChild className="w-full" size="default">
+            <Link to={isPrevious ? `/listings/closed/${id}` : `/listings/${id}`}>
+              <Download className="mr-2 h-4 w-4" />
+              <span>Download Flyer</span>
+            </Link>
+          </Button>
+        ) : (
+          <Button variant="outline" asChild className="w-full" size="default">
+            <Link to="/contact">
+              <Download className="mr-2 h-4 w-4" />
+              <span>Download Flyer</span>
+            </Link>
+          </Button>
+        )}
       </div>
     </Card>
   );

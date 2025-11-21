@@ -12,7 +12,6 @@ import {
 import Autoplay from "embla-carousel-autoplay";
 import heroImage from "@/assets/hero-image.jpg";
 import { useListings, usePreviousDeals } from "@/hooks/useListings";
-
 const Home = () => {
   const { data: currentListings = [], isLoading: isLoadingListings } = useListings();
   const { data: closedTransactions = [], isLoading: isLoadingDeals } = usePreviousDeals();
@@ -31,20 +30,20 @@ const Home = () => {
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${heroImage})` }}
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-neutral-900/95 via-neutral-900/85 to-neutral-900/60" />
+          <div className="absolute inset-0 bg-black/30" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-          <div className="inline-block mb-4 px-4 py-2 bg-primary/20 border border-primary/30 rounded-full">
-            <span className="text-sm font-semibold text-primary-foreground">Serving the Pacific Northwest Since 2008</span>
-          </div>
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
-            Real Estate <span className="text-primary">Elevated</span>
-          </h1>
-          <p className="text-xl md:text-2xl mb-4 text-neutral-100 max-w-3xl mx-auto leading-relaxed">
+            <div className="inline-block mb-4 px-4 py-2 bg-primary/20 border border-primary/30 rounded-full">
+              <span className="text-sm font-semibold text-primary-foreground">Serving the Pacific Northwest Since 2008</span>
+            </div>
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
+              Real Estate <span className="text-primary">Elevated</span>
+            </h1>
+          <p className="text-xl md:text-2xl mb-4 text-neutral-100 max-w-3xl mx-auto  leading-relaxed">
             Premier commercial real estate and business brokerage services delivering results that exceed expectations
           </p>
-          <p className="text-lg md:text-xl mb-8 text-neutral-200/90 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl mb-8  text-neutral-200/90 max-w-2xl mx-auto">
             Expert guidance • Local market knowledge • Proven track record
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

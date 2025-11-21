@@ -10,6 +10,7 @@ import Listings from "./pages/Listings";
 import CurrentListings from "./pages/CurrentListings";
 import ClosedTransactions from "./pages/ClosedTransactions";
 import ListingDetails from "./pages/ListingDetails";
+import ClosedTransactionDetails from "./pages/ClosedTransactionDetails";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import NDA from "./pages/NDA";
@@ -33,6 +34,7 @@ const App = () => (
               <Route path="/listings/current" element={<CurrentListings />} />
               <Route path="/listings/closed" element={<ClosedTransactions />} />
               <Route path="/listings/:id" element={<ListingDetails />} />
+              <Route path="/listings/closed/:id" element={<ClosedTransactionDetails />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/nda" element={<NDA />} />
               <Route path="/team" element={<Team />} />

@@ -143,3 +143,22 @@ export const fetchListingById = async (id: string): Promise<Listing | null> => {
   }
 };
 
+// Fetch single previous deal by document id from 'previous-deals' collection
+export const fetchPreviousDealById = async (id: string): Promise<Listing | null> => {
+  try {
+    const docRef = firestoreDoc(db, "previous-deals", String(id));
+    const snap = await getDoc(docRef);
+    if (!snap.exists()) return null;
+    const listing = convertFirestoreDocToListing(snap as QueryDocumentSnapshot<DocumentData>);
+    listing.status = "sold";
+    return listing;
+  } catch (error: any) {
+    console.error("Error fetching previous deal by id:", error);
+    if (error?.code === "permission-denied") {
+      console.error("\u274c Permission denied! Please update Firestore security rules in Firebase Console.");
+      throw new Error("Missing or insufficient permissions. Please update Firestore security rules to allow read access to 'previous-deals'.");
+    }
+    throw error;
+  }
+};
+
