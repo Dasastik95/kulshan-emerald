@@ -155,7 +155,7 @@ const PropertyCard = ({
   if (isPrevious) {
     return (
       <Card className="overflow-hidden h-full flex flex-col hover:shadow-lg transition-all duration-300">
-        <div className="p-6">
+        <div className="p-10">
           {/* Title and Industry */}
           <h3 className="font-bold text-2xl mb-2 text-foreground">{title}</h3>
           <p className="text-sm text-muted-foreground mb-1">{displayIndustry}</p>
@@ -164,7 +164,7 @@ const PropertyCard = ({
           )}
 
           {/* Price Boxes */}
-          <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-2 gap-6 mb-6">
             <div className="bg-primary/10 rounded-lg p-4 text-center">
               <div className="text-2xl font-bold text-primary mb-1">{soldPrice ? formatPriceValue(soldPrice) : "N/A"}</div>
               <div className="text-sm text-muted-foreground">Final Sale Price</div>
@@ -233,9 +233,9 @@ const PropertyCard = ({
           </div>
           
           <div className="flex items-center gap-3">
-            <TrendingUp className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+            <TrendingUp className="h-5 w-5 text-green-600 text-muted-foreground flex-shrink-0" />
             <div>
-              <div className="text-sm font-medium text-foreground">{displayGrowth}</div>
+              <div className="text-sm   font-medium text-foreground">{displayGrowth}</div>
               <div className="text-xs text-muted-foreground">Growth</div>
             </div>
           </div>
@@ -280,7 +280,7 @@ const PropertyCard = ({
         <div className="grid grid-cols-2 gap-3 pt-6 border-t border-border">
           <Button 
             onClick={() => setIsOpen(true)}
-            className="w-full bg-[#001f3f] hover:bg-[#001f3f]/90 text-white" 
+            className="w-full bg-[#184703] hover:bg-[#35a501]/90 text-white" 
             size="default"
           >
             Request Information
