@@ -1,68 +1,49 @@
-import TeamMemberCard from "@/components/TeamMemberCard";
-import team2 from "@/assets/team-2.jpg";
+import React from "react";
 
-const Team = () => {
+const Team: React.FC = () => {
   const values = [
-    {
-      title: "Integrity",
-      description: "We conduct business with the highest ethical standards and transparency"
-    },
-    {
-      title: "Local Expertise",
-      description: "Deep market knowledge and established relationships throughout the Pacific Northwest"
-    },
-    {
-      title: "Client Success",
-      description: "Your goals are our priority, and we're committed to delivering exceptional results"
-    },
-    {
-      title: "Professional Excellence",
-      description: "Continuous education and adherence to industry best practices"
-    }
+    { title: "Integrity", description: "We conduct business with the highest ethical standards and transparency" },
+    { title: "Local Expertise", description: "Deep market knowledge and established relationships throughout the Pacific Northwest" },
+    { title: "Client Success", description: "Your goals are our priority, and we're committed to delivering exceptional results" },
+    { title: "Professional Excellence", description: "Continuous education and adherence to industry best practices" },
   ];
 
   const teamMembers = [
     {
       name: "Allen Stockbridge",
-      title: "Managing Broker",
-      company: "Kulshan Commercial Investment Real Estate, LLC",
-      bio: "Allen Stockbridge is managing broker and founder of Kulshan Commercial Investment Real Estate, LLC. Since founding the company in 2008, Allen has been active in representing buyers and sellers of investment properties, and is dedicated to providing quality service, ethics, and local market knowledge for the benefit of clients. Allen is committed to helping investors achieve their goals through effective acquisition and disposition strategies, and has developed relationships with investors, private clients and institutions in the Pacific NW and throughout the US. Allen is the state designated real estate broker for Pacific County, Washington, and his practice has included the successful sale of apartments, office and retail properties, manufactured housing communities, and hospitality projects. Allen is a member of the Commercial Brokers Association (CBA), and has an MBA from Western Washington University.",
-      image: "/team_member/Allen%20Stockbridge.jpeg",
-      email: "astockbridge@kulshan.com",
-      phone: "(360) 555-0101",
-      website: "#",
-      linkedin: "#"
+      title: "Team Leader & Exit Planning Advisor",
+      company: "Owner - B2B Business Brokers",
+      bio: "Team Leader and Owner of B2B Business Brokers with expertise in exit planning and business succession strategies. Guides business owners through the complete exit process with strategic planning and execution.",
+      image: "/team_member/Allen Stockbridge.jpeg",
+      website: "",
+      linkedin: "https://linkedin.com/in/allenstockbridge",
+    },
+    {
+      name: "Ben Nardi",
+      title: "Business Broker & Founder",
+      company: "Everyday Realty, NH",
+      bio: "Principal Broker with legal background (Juris Doctor). Specializes in business brokerage and real estate transactions in New Hampshire with extensive experience in business valuations and sales.",
+      image: "/team_member/Ben Nardi.jpeg",
+      website: "https://everydayrealtybrokerage.com",
+      linkedin: "https://linkedin.com/in/ben-nardi-584841161",
+    },
+    {
+      name: "Dick Obendorf",
+      title: "Business Broker & Founder",
+      company: "bXb Business Brokers, Washington State",
+      bio: "Experienced business broker specializing in working with Baby Boomers. Owner of several businesses with expertise in business valuations and strategic business transactions.",
+      image: "/team_member/Dick Obendorf.jpeg",
+      website: "https://bxbbrokers.com",
+      linkedin: "https://linkedin.com/in/dick-obendorf",
     },
     {
       name: "James Browder",
       title: "Broker",
       company: "Kulshan Commercial",
       bio: "James Browder is a broker with Kulshan Commercial, having joined the team in 2018 after a successful career at Browder Real Estate Services. James has represented clients in dozens of business and real estate transactions throughout Whatcom, Skagit and Island Counties, focusing on land, multi-family, industrial, and business brokerage. He is experienced in working with developers, business owners, and land investors at every stage of the investment cycle. James is active in the Commercial Brokers Association and a lifetime Bellingham resident.",
-      image: team2,
+      image: "/team_member/team-2.jpg",
       email: "jbrowder@kulshan.com",
       phone: "(360) 555-0102",
-      website: "#",
-      linkedin: "#"
-    },
-    {
-      name: "Ben Nardi",
-      title: "Broker",
-      company: "Kulshan Commercial",
-      bio: "Ben Nardi is a broker at Kulshan Commercial. Ben started with the firm in 2012, bringing prior experience in investment property sales and residential property management. He has since represented clients in apartment investments, mobile home parks, and mixed-use development projects. Ben has a strong background in environmental regulations and project management, and is committed to client success in every transaction. Ben holds a BA in Geography from Western Washington University.",
-      image: "/team_member/Ben%20Nardi.jpeg",
-      email: "bnardi@kulshan.com",
-      phone: "(360) 555-0103",
-      website: "#",
-      linkedin: "#"
-    },
-    {
-      name: "Dick Obendorf",
-      title: "Senior Advisor",
-      company: "Kulshan Commercial",
-      bio: "Dick brings decades of wisdom and experience to our team, having been involved in commercial real estate since 1975. His mentorship and strategic insight continue to guide both our team and clients through the most complex transactions and market conditions.",
-      image: "/team_member/Dick%20Obendorf.jpeg",
-      email: "dobendorf@kulshan.com",
-      phone: "(360) 555-0104",
       website: "#",
       linkedin: "#"
     },
@@ -70,7 +51,6 @@ const Team = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
       <div className="relative bg-gradient-to-br from-primary/10 via-accent/50 to-background pt-20 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-block mb-4 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full">
@@ -83,18 +63,15 @@ const Team = () => {
         </div>
       </div>
 
-      {/* Company Values */}
       <section className="py-16 bg-secondary">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Values</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              The principles that guide everything we do
-            </p>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">The principles that guide everything we do</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {values.map((value, index) => (
-              <div key={index} className="bg-card p-6 rounded-lg border border-border text-center hover:shadow-lg transition-shadow">
+            {values.map((value, i) => (
+              <div key={i} className="bg-card p-6 rounded-lg border border-border text-center hover:shadow-lg transition-shadow">
                 <h3 className="text-xl font-bold mb-2 text-primary">{value.title}</h3>
                 <p className="text-sm text-muted-foreground">{value.description}</p>
               </div>
@@ -103,55 +80,39 @@ const Team = () => {
         </div>
       </section>
 
-      {/* Team Members */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="mb-12 text-center">
           <h2 className="text-4xl font-bold mb-4">Leadership Team</h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Dedicated professionals with deep market knowledge and a commitment to your success
-          </p>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">Dedicated professionals with deep market knowledge and a commitment to your success</p>
         </div>
 
-        {/* Team Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          {teamMembers.map((member, index) => (
-            <div key={index} className="bg-white rounded-xl p-8 text-center shadow-xl transition-shadow hover:shadow-2xl border border-transparent flex flex-col">
+          {teamMembers.map((member, idx) => (
+            <div key={idx} className="bg-white rounded-xl p-8 text-center shadow-xl transition-shadow hover:shadow-2xl border border-transparent flex flex-col">
               <div className="mb-6 flex justify-center">
-                <img 
-                  src={member.image} 
-                  alt={member.name}
-                  className="w-28 h-28 rounded-full object-cover shadow-md"
-                />
-              </div>
-              <h3 className="text-2xl font-bold mb-1 text-foreground">{member.name}</h3>
-              <p className="text-base font-medium mb-1 text-foreground">{member.title}</p>
-              <p className="text-sm text-muted-foreground mb-4">{member.company}</p>
-
-              <div className="text-sm text-foreground leading-relaxed mb-6 max-w-xl mx-auto flex-1">
-                <p className="line-clamp-6">{member.bio}</p>
+                <img src={member.image} alt={member.name} className="w-28 h-28 rounded-full object-cover shadow-md" />
               </div>
 
-              <div className="mt-4 flex justify-center gap-6 text-sm">
-                <a href={member.website} className="text-foreground hover:text-primary font-medium" target="_blank" rel="noopener noreferrer">Website</a>
-                <a href={member.linkedin} className="text-foreground hover:text-primary font-medium" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <div className="flex-1">
+                <h3 className="text-2xl font-bold mb-1 text-foreground">{member.name}</h3>
+                <p className="text-base font-medium mb-1 text-foreground">{member.title}</p>
+                <p className="text-sm text-muted-foreground mb-4">{member.company}</p>
+
+                <p className="text-sm text-foreground leading-relaxed mb-6 max-w-xl mx-auto line-clamp-6" style={{ WebkitLineClamp: 6, display: '-webkit-box', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                  {member.bio}
+                </p>
+              </div>
+
+              <div className="flex justify-center gap-6 text-sm mt-4">
+                {member.website ? (
+                  <a href={member.website} className="text-foreground hover:text-primary font-medium" target="_blank" rel="noopener noreferrer">Website</a>
+                ) : null}
+                {member.linkedin ? (
+                  <a href={member.linkedin} className="text-foreground hover:text-primary font-medium" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                ) : null}
               </div>
             </div>
           ))}
-        </div>
-
-        {/* CTA Section */}
-        <div className="bg-accent p-8 md:p-12 rounded-lg text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Work With Us?</h2>
-          <p className="text-xl text-muted-foreground mb-6 max-w-2xl mx-auto">
-            Our team is ready to help you navigate your commercial real estate or business
-            transition needs
-          </p>
-          <a
-            href="/contact"
-            className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8"
-          >
-            Get in Touch
-          </a>
         </div>
       </div>
     </div>
