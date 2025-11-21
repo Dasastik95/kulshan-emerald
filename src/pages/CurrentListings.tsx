@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-// framer-motion removed to avoid adding new dependency; use simple elements instead
-import { Search, MapPin, Users, DollarSign, TrendingUp, ArrowRight, Download, Loader2 } from "lucide-react";
+import { Search, ArrowRight, Loader2 } from "lucide-react";
 import { useListings } from "@/hooks/useListings";
+import PropertyCard from "@/components/PropertyCard";
 
 const CurrentListings: React.FC = () => {
   const { data: listings = [], isLoading, isError, error } = useListings();
@@ -135,58 +135,19 @@ const CurrentListings: React.FC = () => {
       </section>
 
       <section className="section-padding">
-        <div className="container-width">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8 items-stretch">
-            {filteredListings.length === 0 && (
-              <div className="text-center py-16 col-span-2">
-                <h3 className="text-xl sm:text-2xl font-semibold text-primary mb-4">No listings found</h3>
-                <p className="text-muted-foreground mb-8 text-sm sm:text-base">Try adjusting your search criteria or browse all listings.</p>
-              </div>
-            )}
-
-            {filteredListings.length > 0 && filteredListings.map((listing: any) => (
-              <div key={listing.id ?? listing._id ?? listing.docId} className={`p-6 bg-white rounded-xl shadow-sm border border-transparent hover:border-slate-200 transition-colors`}>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
-                  <div>
-                    <div className="flex items-start justify-between mb-4">
-                      <div>
-                        <h3 className="text-2xl lg:text-2xl font-bold text-slate-900 leading-tight">{listing.title}</h3>
-                        <div className="text-sm text-slate-500 mt-1">{listing.industry}</div>
-                      </div>
-                      <div className="text-right ml-6">
-                        <div className="text-3xl md:text-4xl lg:text-4xl font-extrabold text-slate-900">{listing.askingPrice ?? '---'}</div>
-                        <div className="text-sm text-slate-400">Asking Price</div>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4 text-slate-600">
-                      <div className="flex items-start gap-3"><DollarSign className="h-4 w-4 text-slate-400 mt-1" /><div><div className="font-medium">{listing.revenue ?? '---'}</div><div className="text-xs text-slate-400">Revenue</div></div></div>
-                      <div className="flex items-start gap-3"><TrendingUp className="h-4 w-4 text-slate-400 mt-1" /><div><div className="font-medium text-emerald-700">{listing.growth ?? '---'}</div><div className="text-xs text-slate-400">Growth</div></div></div>
-                      <div className="flex items-start gap-3"><Users className="h-4 w-4 text-slate-400 mt-1" /><div><div className="font-medium">{listing.employees ?? '---'}</div><div className="text-xs text-slate-400">Employees</div></div></div>
-                      <div className="flex items-start gap-3"><MapPin className="h-4 w-4 text-slate-400 mt-1" /><div><div className="font-medium">{listing.location ?? '---'}</div><div className="text-xs text-slate-400">Location</div></div></div>
-                    </div>
-
-                    <p className="text-slate-600 mb-6">{listing.description}</p>
-
-                    <h4 className="font-semibold text-slate-900 mb-3">Key Highlights</h4>
-                    <div className="flex flex-wrap gap-3 mb-6">
-                      {(Array.isArray(listing.highlights) ? listing.highlights : []).map((highlight: any, i: number) => (
-                        <span key={i} className="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-sm">{highlight.text ?? highlight}</span>
-                      ))}
-                    </div>
-
-                    <div className="flex gap-4 mt-8">
-                      <button onClick={() => { setSelectedListing(listing); setIsOpen(true); }} className="flex-1 bg-[#071b34] text-white py-4 rounded-2xl text-lg font-semibold shadow-md">Request Information <span className="ml-3">→</span></button>
-                      <button onClick={() => handleDownloadFlyer(listing)} className="flex-1 bg-[#071b34] text-white py-4 rounded-2xl text-lg font-semibold shadow-md">Download Flyer <span className="ml-3">⤓</span></button>
-                    </div>
-                  </div>
-
-                  {/* price moved into the header column */}
-                  <div className="hidden lg:block" />
-                </div>
-              </div>
-            ))}
-          </div>
+        <div className="max-w-6xl mx-auto px-4">
+          {filteredListings.length === 0 ? (
+            <div className="text-center py-16">
+              <h3 className="text-xl sm:text-2xl font-semibold text-primary mb-4">No listings found</h3>
+              <p className="text-muted-foreground mb-8 text-sm sm:text-base">Try adjusting your search criteria or browse all listings.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {filteredListings.map((listing: any) => (
+                <PropertyCard key={listing.id ?? listing._id ?? listing.docId} {...listing} id={listing.id ?? listing._id ?? listing.docId} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
