@@ -208,7 +208,7 @@ const PropertyCard = ({
 
   // Render current listing card
   return (
-    <Card className="overflow-hidden h-full flex flex-col hover:shadow-lg transition-all duration-300">
+    <Card className="overflow-hidden h-full flex flex-col hover:shadow-lg transition-all duration-300 border-l-4 border-l-accent hover:border-l-accent/80">
       <div className="p-6">
         {/* Title, Industry, and Price */}
         <div className="flex items-start justify-between gap-4 mb-6">
