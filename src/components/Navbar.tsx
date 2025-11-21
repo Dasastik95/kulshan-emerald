@@ -25,17 +25,18 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-14 items-center">
-          {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="text-2xl font-bold text-primary">
-              Kulshan <span className="text-foreground">Commercial</span>
-            </div>
+      <div className="relative">
+        {/* Flush-left logo */}
+        <div className="absolute left-0 top-0 h-full flex items-center px-4 sm:px-6">
+          <Link to="/" className="flex items-center space-x-3">
+            <img src="/KCIREElevatedLogo.png" alt="KCIREElevated logo" className="w-24 h-auto object-contain" />
           </Link>
+        </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-1">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-center h-14 items-center">
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-1">
             {navLinks.map((link) =>
               link.children ? (
                 <div key={link.to} className="relative group">
@@ -79,13 +80,14 @@ const Navbar = () => {
             </Button>
           </div>
 
-          {/* Mobile menu button */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent"
-          >
-            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+            {/* Mobile menu button */}
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="md:hidden p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent absolute right-4 top-1/2 -translate-y-1/2"
+            >
+              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
         </div>
       </div>
 

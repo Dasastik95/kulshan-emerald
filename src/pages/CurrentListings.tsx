@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Search, ArrowRight, Loader2 } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { useListings } from "@/hooks/useListings";
 import PropertyCard from "@/components/PropertyCard";
 
@@ -151,7 +153,7 @@ const CurrentListings: React.FC = () => {
         </div>
       </section>
 
-      {isOpen && (
+  {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="bg-white p-6 rounded-lg w-full max-w-md relative">
             <button onClick={() => setIsOpen(false)} className="absolute top-3 right-3 text-gray-500 hover:text-gray-700">✕</button>
@@ -174,7 +176,23 @@ const CurrentListings: React.FC = () => {
           </div>
         </div>
       )}
+      
+      <section className="mt-16">
+        <div className="w-full bg-primary text-white">
+          <div className="max-w-7xl mx-auto px-6 text-center py-12">
+            <div className="bg-primary/0 rounded-lg">
+              <h2 className="text-3xl font-bold mb-4">List your commercial property to get top dollar offers</h2>
+              <p className="text-xl mb-6 text-primary-foreground/90">Connect with our experience team to discuss selling your commercial investment real estate property. We will help you sell it on the best terms available by generating multiple, competing offers</p>
+              <Button size="lg" variant="secondary" asChild>
+                <Link to="/contact">Contact Us Today</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </div>
+    
   );
 };
 

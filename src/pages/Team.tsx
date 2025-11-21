@@ -1,8 +1,5 @@
 import TeamMemberCard from "@/components/TeamMemberCard";
-import team1 from "@/assets/team-1.jpg";
 import team2 from "@/assets/team-2.jpg";
-import team3 from "@/assets/team-3.jpg";
-import team4 from "@/assets/team-4.jpg";
 
 const Team = () => {
   const values = [
@@ -30,7 +27,7 @@ const Team = () => {
       title: "Managing Broker",
       company: "Kulshan Commercial Investment Real Estate, LLC",
       bio: "Allen Stockbridge is managing broker and founder of Kulshan Commercial Investment Real Estate, LLC. Since founding the company in 2008, Allen has been active in representing buyers and sellers of investment properties, and is dedicated to providing quality service, ethics, and local market knowledge for the benefit of clients. Allen is committed to helping investors achieve their goals through effective acquisition and disposition strategies, and has developed relationships with investors, private clients and institutions in the Pacific NW and throughout the US. Allen is the state designated real estate broker for Pacific County, Washington, and his practice has included the successful sale of apartments, office and retail properties, manufactured housing communities, and hospitality projects. Allen is a member of the Commercial Brokers Association (CBA), and has an MBA from Western Washington University.",
-      image: team1,
+      image: "/team_member/Allen%20Stockbridge.jpeg",
       email: "astockbridge@kulshan.com",
       phone: "(360) 555-0101",
       website: "#",
@@ -52,7 +49,7 @@ const Team = () => {
       title: "Broker",
       company: "Kulshan Commercial",
       bio: "Ben Nardi is a broker at Kulshan Commercial. Ben started with the firm in 2012, bringing prior experience in investment property sales and residential property management. He has since represented clients in apartment investments, mobile home parks, and mixed-use development projects. Ben has a strong background in environmental regulations and project management, and is committed to client success in every transaction. Ben holds a BA in Geography from Western Washington University.",
-      image: team3,
+      image: "/team_member/Ben%20Nardi.jpeg",
       email: "bnardi@kulshan.com",
       phone: "(360) 555-0103",
       website: "#",
@@ -63,7 +60,7 @@ const Team = () => {
       title: "Senior Advisor",
       company: "Kulshan Commercial",
       bio: "Dick brings decades of wisdom and experience to our team, having been involved in commercial real estate since 1975. His mentorship and strategic insight continue to guide both our team and clients through the most complex transactions and market conditions.",
-      image: team4,
+      image: "/team_member/Dick%20Obendorf.jpeg",
       email: "dobendorf@kulshan.com",
       phone: "(360) 555-0104",
       website: "#",
@@ -118,37 +115,25 @@ const Team = () => {
         {/* Team Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {teamMembers.map((member, index) => (
-            <div key={index} className="bg-white rounded-lg p-8 text-center hover:shadow-lg transition-shadow border border-border">
+            <div key={index} className="bg-white rounded-xl p-8 text-center shadow-xl transition-shadow hover:shadow-2xl border border-transparent flex flex-col">
               <div className="mb-6 flex justify-center">
                 <img 
                   src={member.image} 
                   alt={member.name}
-                  className="w-40 h-40 rounded-full object-cover"
+                  className="w-28 h-28 rounded-full object-cover shadow-md"
                 />
               </div>
-              <h3 className="text-2xl font-bold mb-2 text-foreground">{member.name}</h3>
-              <p className="text-lg font-semibold mb-3 text-foreground">{member.title}</p>
-              <p className="text-sm text-muted-foreground mb-6">{member.company}</p>
-              <p className="text-base text-foreground leading-relaxed mb-6">
-                {member.bio}
-              </p>
-              <div className="flex justify-center gap-4">
-                <a 
-                  href={member.website} 
-                  className="text-foreground hover:text-primary underline font-medium"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Website
-                </a>
-                <a 
-                  href={member.linkedin} 
-                  className="text-foreground hover:text-primary underline font-medium"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  LinkedIn
-                </a>
+              <h3 className="text-2xl font-bold mb-1 text-foreground">{member.name}</h3>
+              <p className="text-base font-medium mb-1 text-foreground">{member.title}</p>
+              <p className="text-sm text-muted-foreground mb-4">{member.company}</p>
+
+              <div className="text-sm text-foreground leading-relaxed mb-6 max-w-xl mx-auto flex-1">
+                <p className="line-clamp-6">{member.bio}</p>
+              </div>
+
+              <div className="mt-4 flex justify-center gap-6 text-sm">
+                <a href={member.website} className="text-foreground hover:text-primary font-medium" target="_blank" rel="noopener noreferrer">Website</a>
+                <a href={member.linkedin} className="text-foreground hover:text-primary font-medium" target="_blank" rel="noopener noreferrer">LinkedIn</a>
               </div>
             </div>
           ))}
