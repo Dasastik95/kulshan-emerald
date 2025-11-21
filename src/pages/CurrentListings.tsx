@@ -134,7 +134,7 @@ const CurrentListings: React.FC = () => {
         <div className="mt-4 ml-10 text-muted-foreground">Showing {filteredListings.length} of {allListings.length} businesses</div>
       </section>
 
-      <section className="section-padding">
+      <section className="py-16">
         <div className="max-w-6xl mx-auto px-4">
           {filteredListings.length === 0 ? (
             <div className="text-center py-16">
@@ -142,7 +142,7 @@ const CurrentListings: React.FC = () => {
               <p className="text-muted-foreground mb-8 text-sm sm:text-base">Try adjusting your search criteria or browse all listings.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
               {filteredListings.map((listing: any) => (
                 <PropertyCard key={listing.id ?? listing._id ?? listing.docId} {...listing} id={listing.id ?? listing._id ?? listing.docId} />
               ))}
