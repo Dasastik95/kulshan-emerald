@@ -87,6 +87,45 @@ const PropertyCard = ({
   ...rest
 }: PropertyCardProps) => {
   const [imageError, setImageError] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: "7479fcc1-3404-4173-8e61-6812306a7547",
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          subject: `Business Listing Inquiry: ${title}`,
+          listing_name: title,
+          listing_industry: displayIndustry,
+          listing_price: displayPrice,
+          redirect: "",
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        alert("Form submitted successfully!");
+        setIsOpen(false);
+        setFormData({ name: "", email: "", phone: "" });
+      } else {
+        alert("Failed to submit the form. Please try again.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("An error occurred while submitting the form.");
+    }
+  };
 
   // If this card represents a previous deal, route to closed listing paths
   const isPrevious = rest.previous === true || status === "sold";
@@ -239,11 +278,13 @@ const PropertyCard = ({
 
         {/* Action Buttons */}
         <div className="grid grid-cols-2 gap-3 pt-6 border-t border-border">
-          <Button asChild className="w-full bg-[#001f3f] hover:bg-[#001f3f]/90 text-white" size="default">
-            <Link to="/contact">
-              Request Information
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
+          <Button 
+            onClick={() => setIsOpen(true)}
+            className="w-full bg-[#001f3f] hover:bg-[#001f3f]/90 text-white" 
+            size="default"
+          >
+            Request Information
+            <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
 
           {rest.flyerUrl ? (
@@ -270,6 +311,63 @@ const PropertyCard = ({
           )}
         </div>
       </div>
+
+      {/* Modal */}
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white p-6 rounded-lg w-full max-w-md relative">
+            <button
+              onClick={() => setIsOpen(false)}
+              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+            >
+              ✕
+            </button>
+            <h2 className="text-xl font-semibold mb-4">Request Information</h2>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Your Name *</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Email Address *</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Phone Number *</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+
+              <button type="submit" className="btn-primary flex items-center justify-center mt-2">
+                Submit
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </Card>
   );
 };
