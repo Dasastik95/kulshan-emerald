@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, TrendingUp, Award, Users, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PropertyCard from "@/components/PropertyCard";
 import CompactPropertyCard from "@/components/CompactPropertyCard";
+import ClosedTransactionModal from "@/components/ClosedTransactionModal";
+import CurrentListingModal from "@/components/CurrentListingModal";
 import {
   Carousel,
   CarouselContent,
@@ -16,12 +19,48 @@ import { useListings, usePreviousDeals } from "@/hooks/useListings";
 const Home = () => {
   const { data: currentListings = [], isLoading: isLoadingListings } = useListings();
   const { data: closedTransactions = [], isLoading: isLoadingDeals } = usePreviousDeals();
+  const [selectedTransactionId, setSelectedTransactionId] = useState<string | null>(null);
+  const [selectedTransaction, setSelectedTransaction] = useState<any | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedListingId, setSelectedListingId] = useState<string | null>(null);
+  const [selectedListing, setSelectedListing] = useState<any | null>(null);
+  const [isListingModalOpen, setIsListingModalOpen] = useState(false);
 
   // Limit to first 8 listings for carousel display
   const displayedListings = currentListings.slice(0, 8);
   const displayedDeals = closedTransactions.slice(0, 8);
 
   const isLoading = isLoadingListings || isLoadingDeals;
+
+  const handleClosedTransactionClick = (property: any) => {
+    const transactionId = property.id || property._id || property.docId;
+    if (transactionId) {
+      setSelectedTransaction(property);
+      setSelectedTransactionId(String(transactionId));
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedTransactionId(null);
+    setSelectedTransaction(null);
+  };
+
+  const handleCurrentListingClick = (property: any) => {
+    const listingId = property.id || property._id || property.docId;
+    if (listingId) {
+      setSelectedListing(property);
+      setSelectedListingId(String(listingId));
+      setIsListingModalOpen(true);
+    }
+  };
+
+  const handleCloseListingModal = () => {
+    setIsListingModalOpen(false);
+    setSelectedListingId(null);
+    setSelectedListing(null);
+  };
 
   return (
     <div className="min-h-screen">
@@ -54,7 +93,7 @@ const Home = () => {
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="text-lg h-14 px-8 bg-white/10 border-white/30 text-white hover:bg-white/20" asChild>
+            <Button size="lg" variant="outline" className="text-lg h-14 px-8 bg-white/10 border-white/30 text-white" asChild>
               <Link to="/listings/current">
                 View Properties
               </Link>
@@ -240,13 +279,22 @@ const Home = () => {
               className="w-full"
             >
               <CarouselContent>
-                {displayedListings.map((property) => (
-                  <CarouselItem key={property.id} className="md:basis-1/2 lg:basis-1/3">
-                    <div className="p-1">
-                      <CompactPropertyCard {...property} />
-                    </div>
-                  </CarouselItem>
-                ))}
+                {displayedListings.map((property) => {
+                  const listingId = property.id || property._id || property.docId;
+                  return (
+                    <CarouselItem key={listingId} className="md:basis-1/2 lg:basis-1/3">
+                      <div className="p-1">
+                        <CompactPropertyCard
+                          {...property}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleCurrentListingClick(property);
+                          }}
+                        />
+                      </div>
+                    </CarouselItem>
+                  );
+                })}
               </CarouselContent>
               <CarouselPrevious className="hidden md:flex" />
               <CarouselNext className="hidden md:flex" />
@@ -295,13 +343,23 @@ const Home = () => {
               className="w-full"
             >
               <CarouselContent>
-                {displayedDeals.map((property) => (
-                  <CarouselItem key={property.id || property._id || property.docId} className="md:basis-1/2 lg:basis-1/3">
-                    <div className="p-1">
-                      <CompactPropertyCard {...property} previous />
-                    </div>
-                  </CarouselItem>
-                ))}
+                {displayedDeals.map((property) => {
+                  const transactionId = property.id || property._id || property.docId;
+                  return (
+                    <CarouselItem key={transactionId} className="md:basis-1/2 lg:basis-1/3">
+                      <div className="p-1">
+                        <CompactPropertyCard
+                          {...property}
+                          previous
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleClosedTransactionClick(property);
+                          }}
+                        />
+                      </div>
+                    </CarouselItem>
+                  );
+                })}
               </CarouselContent>
               <CarouselPrevious className="hidden md:flex" />
               <CarouselNext className="hidden md:flex" />
@@ -309,6 +367,24 @@ const Home = () => {
           )}
         </div>
       </section>
+
+      {/* Closed Transaction Modal */}
+      <ClosedTransactionModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        transactionId={selectedTransactionId}
+        cachedTransaction={selectedTransaction}
+        allTransactions={closedTransactions}
+      />
+
+      {/* Current Listing Modal */}
+      <CurrentListingModal
+        isOpen={isListingModalOpen}
+        onClose={handleCloseListingModal}
+        listingId={selectedListingId}
+        cachedListing={selectedListing}
+        allListings={currentListings}
+      />
     </div>
   );
 };

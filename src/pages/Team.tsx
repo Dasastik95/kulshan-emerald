@@ -1,4 +1,6 @@
 import React from "react";
+import { Globe, Linkedin, ExternalLink } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Team: React.FC = () => {
   const values = [
@@ -103,12 +105,34 @@ const Team: React.FC = () => {
                 </p>
               </div>
 
-              <div className="flex justify-center gap-6 text-sm mt-4">
-                {member.website ? (
-                  <a href={member.website} className="text-foreground hover:text-primary font-medium" target="_blank" rel="noopener noreferrer">Website</a>
+              <div className="flex justify-center gap-3 mt-6">
+                {member.website && member.website !== "#" ? (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-2 border-primary/20 hover:border-primary hover:bg-primary/5 hover:text-primary transition-all duration-200"
+                    asChild
+                  >
+                    <a href={member.website} target="_blank" rel="noopener noreferrer">
+                      <Globe className="h-4 w-4" />
+                      Website
+                      <ExternalLink className="h-3 w-3 opacity-60" />
+                    </a>
+                  </Button>
                 ) : null}
-                {member.linkedin ? (
-                  <a href={member.linkedin} className="text-foreground hover:text-primary font-medium" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                {member.linkedin && member.linkedin !== "#" ? (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-2 border-blue-200 hover:border-blue-500 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200"
+                    asChild
+                  >
+                    <a href={member.linkedin} target="_blank" rel="noopener noreferrer">
+                      <Linkedin className="h-4 w-4" />
+                      LinkedIn
+                      <ExternalLink className="h-3 w-3 opacity-60" />
+                    </a>
+                  </Button>
                 ) : null}
               </div>
             </div>

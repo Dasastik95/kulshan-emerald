@@ -9,6 +9,7 @@ interface CompactProps {
   askingPrice?: any;
   soldPrice?: any;
   status?: string;
+  onClick?: (e: React.MouseEvent) => void;
   [key: string]: any;
 }
 
@@ -26,7 +27,7 @@ function formatPriceValue(val: any) {
   return String(val);
 }
 
-const CompactPropertyCard = ({ id, title = "Untitled", location = "", price, askingPrice, soldPrice, status, image, images = [], photos = [], ...rest }: CompactProps) => {
+const CompactPropertyCard = ({ id, title = "Untitled", location = "", price, askingPrice, soldPrice, status, image, images = [], photos = [], onClick, ...rest }: CompactProps) => {
   const displayPrice = formatPriceValue(askingPrice ?? price ?? soldPrice);
   const isPrevious = rest.previous === true || status === "sold";
 
@@ -61,33 +62,47 @@ const CompactPropertyCard = ({ id, title = "Untitled", location = "", price, ask
     ? localAssetMap[thumbCandidate.split('/').pop() as string]
     : thumbCandidate;
 
-  return (
-    <Link to={link} className="block">
-      <Card className="h-full overflow-hidden hover:shadow-md transition-shadow border-border/50">
-        <div className="w-full h-40 bg-muted overflow-hidden">
-          <img
-            src={thumb}
-            alt={title}
-            className="w-full h-full object-cover"
-            onError={(e: any) => {
-              e.currentTarget.src = "/placeholder.svg";
-            }}
-          />
-        </div>
+  const cardContent = (
+    <Card className="h-full overflow-hidden hover:shadow-md transition-shadow border-border/50">
+      <div className="w-full h-40 bg-muted overflow-hidden">
+        <img
+          src={thumb}
+          alt={title}
+          className="w-full h-full object-cover"
+          onError={(e: any) => {
+            e.currentTarget.src = "/placeholder.svg";
+          }}
+        />
+      </div>
 
-        <div className="p-3">
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-lg text-foreground truncate">{title}</h3>
-              {location && <div className="text-sm text-muted-foreground truncate">{location}</div>}
-            </div>
+      <div className="p-3">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold text-lg text-foreground truncate">{title}</h3>
+            {location && <div className="text-sm text-muted-foreground truncate">{location}</div>}
+          </div>
 
-            <div className="text-right ml-2">
-              <div className="text-lg font-bold text-foreground">{displayPrice}</div>
-            </div>
+          <div className="text-right ml-2">
+            <div className="text-lg font-bold text-foreground">{displayPrice}</div>
           </div>
         </div>
-      </Card>
+      </div>
+    </Card>
+  );
+
+  // If onClick handler is provided, use div with onClick (for modals)
+  if (onClick) {
+    return (
+      <div onClick={onClick} className="block cursor-pointer">
+        {cardContent}
+      </div>
+    );
+  }
+
+  // Default: use Link component for navigation
+  return (
+    <Link to={link} className="block">
+      {cardContent}
     </Link>
   );
 };

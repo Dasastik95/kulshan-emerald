@@ -112,7 +112,7 @@ const CurrentListings: React.FC = () => {
 
   return (
     <div className="min-h-screen pt-20">
-      <section className="section-padding bg-gradient-to-br from-primary/10 via-accent/30 to-background">
+      <section className="section-padding bg-white">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Current Business Listings</h1>
           <p className="text-lg text-muted-foreground mb-8">Explore opportunities to acquire established, profitable businesses across various industries. All listings are confidential and pre-qualified.</p>

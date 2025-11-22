@@ -25,17 +25,35 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-14 items-center">
-          {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="text-2xl font-bold text-primary">
-              Kulshan <span className="text-foreground">Commercial</span>
-            </div>
-          </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-1">
+      {/* Logo - flush left corner */}
+      <div className="absolute left-0 top-0 h-14 flex items-center">
+        <Link to="/" className="flex items-center">
+          <img src="/logo.png" alt="Kulshan Commercial logo" className="h-14 sm:h-20 w-auto object-contain" />
+        </Link>
+      </div>
+
+      {/* Actions - flush right corner (CTA + mobile menu) */}
+      <div className="absolute right-0 top-0 h-14 flex items-center">
+        <div className="hidden md:block mr-2">
+          <Button asChild size="sm">
+            <Link to="/contact">Get Started</Link>
+          </Button>
+        </div>
+        <div className="md:hidden">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent"
+          >
+            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center h-14 justify-center px-4 md:px-20 lg:px-28">
+          {/* Center: Navigation links */}
+          <div className="hidden md:flex justify-center items-center space-x-1">
             {navLinks.map((link) =>
               link.children ? (
                 <div key={link.to} className="relative group">
@@ -74,20 +92,10 @@ const Navbar = () => {
                 </NavLink>
               )
             )}
-            <Button asChild size="sm" className="ml-4">
-              <Link to="/contact">Get Started</Link>
-            </Button>
           </div>
 
-          {/* Mobile menu button */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent"
-          >
-            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+          </div>
         </div>
-      </div>
 
       {/* Mobile Navigation */}
       {isOpen && (
