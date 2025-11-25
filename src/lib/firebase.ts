@@ -2,13 +2,12 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAQE5rZ4lrqyfqp7Z1DE2F58YvO4H2prC4",
-  authDomain: "clientlisting01.firebaseapp.com",
-  projectId: "clientlisting01",
-  storageBucket: "clientlisting01.firebasestorage.app",
-  messagingSenderId: "589170277063",
-  appId: "1:589170277063:web:aae522938f0dbc7c719ce2",
-  measurementId: "G-72MFZTYD0W"
+  apiKey: "AIzaSyAQFIC0TUkW5gIaCg4U7iE0_Bf7IfJtC1U",
+  authDomain: "sagar-77bb1.firebaseapp.com",
+  projectId: "sagar-77bb1",
+  storageBucket: "sagar-77bb1.firebasestorage.app",
+  messagingSenderId: "1044360136200",
+  appId: "1:1044360136200:web:8e42d0200d04d4d24033bd"
 };
 
 // Initialize Firebase

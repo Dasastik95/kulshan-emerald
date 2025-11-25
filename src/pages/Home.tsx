@@ -15,10 +15,19 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import heroImage from "@/assets/hero-image.jpg";
-import { useListings, usePreviousDeals } from "@/hooks/useListings";
+import { 
+  useKulshanCommercialCurrent,
+  useB2BBusinessBrokersCurrent,
+  useKulshanCommercialPrevious,
+  useB2BBusinessBrokersPrevious
+} from "@/hooks/useListings";
+
 const Home = () => {
-  const { data: currentListings = [], isLoading: isLoadingListings } = useListings();
-  const { data: closedTransactions = [], isLoading: isLoadingDeals } = usePreviousDeals();
+  // Fetch data from different collections
+  const { data: kulshanCurrentListings = [], isLoading: isLoadingKulshanCurrent } = useKulshanCommercialCurrent();
+  const { data: b2bCurrentListings = [], isLoading: isLoadingB2BCurrent } = useB2BBusinessBrokersCurrent();
+  const { data: kulshanClosedTransactions = [], isLoading: isLoadingKulshanPrevious } = useKulshanCommercialPrevious();
+  const { data: b2bClosedTransactions = [], isLoading: isLoadingB2BPrevious } = useB2BBusinessBrokersPrevious();
   const [selectedTransactionId, setSelectedTransactionId] = useState<string | null>(null);
   const [selectedTransaction, setSelectedTransaction] = useState<any | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,10 +36,15 @@ const Home = () => {
   const [isListingModalOpen, setIsListingModalOpen] = useState(false);
 
   // Limit to first 8 listings for carousel display
-  const displayedListings = currentListings.slice(0, 8);
-  const displayedDeals = closedTransactions.slice(0, 8);
+  const displayedKulshanCurrentListings = kulshanCurrentListings.slice(0, 8);
+  const displayedB2BCurrentListings = b2bCurrentListings.slice(0, 8);
+  const displayedKulshanClosedDeals = kulshanClosedTransactions.slice(0, 8);
+  const displayedB2BClosedDeals = b2bClosedTransactions.slice(0, 8);
 
-  const isLoading = isLoadingListings || isLoadingDeals;
+  const isLoadingKulshanListings = isLoadingKulshanCurrent;
+  const isLoadingB2BListings = isLoadingB2BCurrent;
+  const isLoadingKulshanDeals = isLoadingKulshanPrevious;
+  const isLoadingB2BDeals = isLoadingB2BPrevious;
 
   const handleClosedTransactionClick = (property: any) => {
     const transactionId = property.id || property._id || property.docId;
@@ -260,11 +274,11 @@ const Home = () => {
                 </Button>
               </div>
 
-              {isLoadingListings ? (
+              {isLoadingKulshanListings ? (
                 <div className="flex items-center justify-center py-12">
                   <Loader2 className="h-8 w-8 animate-spin text-primary" />
                 </div>
-              ) : displayedListings.length === 0 ? (
+              ) : displayedKulshanCurrentListings.length === 0 ? (
                 <div className="text-center py-12">
                   <p className="text-muted-foreground">No listings available at this time.</p>
                 </div>
@@ -282,7 +296,7 @@ const Home = () => {
                   className="w-full"
                 >
                   <CarouselContent>
-                    {displayedListings.map((property) => {
+                    {displayedKulshanCurrentListings.map((property) => {
                       const listingId = property.id || property._id || property.docId;
                       return (
                         <CarouselItem key={listingId} className="basis-full">
@@ -320,11 +334,11 @@ const Home = () => {
                 </Button>
               </div>
 
-              {isLoadingListings ? (
+              {isLoadingB2BListings ? (
                 <div className="flex items-center justify-center py-12">
                   <Loader2 className="h-8 w-8 animate-spin text-primary" />
                 </div>
-              ) : displayedListings.length === 0 ? (
+              ) : displayedB2BCurrentListings.length === 0 ? (
                 <div className="text-center py-12">
                   <p className="text-muted-foreground">No listings available at this time.</p>
                 </div>
@@ -342,7 +356,7 @@ const Home = () => {
                   className="w-full"
                 >
                   <CarouselContent>
-                    {displayedListings.map((property) => {
+                    {displayedB2BCurrentListings.map((property) => {
                       const listingId = property.id || property._id || property.docId;
                       return (
                         <CarouselItem key={listingId} className="basis-full">
@@ -387,11 +401,11 @@ const Home = () => {
                 </Button>
               </div>
 
-              {isLoadingDeals ? (
+              {isLoadingKulshanDeals ? (
                 <div className="flex items-center justify-center py-12">
                   <Loader2 className="h-8 w-8 animate-spin text-primary" />
                 </div>
-              ) : displayedDeals.length === 0 ? (
+              ) : displayedKulshanClosedDeals.length === 0 ? (
                 <div className="text-center py-12">
                   <p className="text-muted-foreground">No closed transactions to display at this time.</p>
                 </div>
@@ -409,7 +423,7 @@ const Home = () => {
                   className="w-full"
                 >
                   <CarouselContent>
-                    {displayedDeals.map((property) => {
+                    {displayedKulshanClosedDeals.map((property) => {
                       const transactionId = property.id || property._id || property.docId;
                       return (
                         <CarouselItem key={transactionId} className="basis-full">
@@ -448,11 +462,11 @@ const Home = () => {
                 </Button>
               </div>
 
-              {isLoadingDeals ? (
+              {isLoadingB2BDeals ? (
                 <div className="flex items-center justify-center py-12">
                   <Loader2 className="h-8 w-8 animate-spin text-primary" />
                 </div>
-              ) : displayedDeals.length === 0 ? (
+              ) : displayedB2BClosedDeals.length === 0 ? (
                 <div className="text-center py-12">
                   <p className="text-muted-foreground">No closed transactions to display at this time.</p>
                 </div>
@@ -470,7 +484,7 @@ const Home = () => {
                   className="w-full"
                 >
                   <CarouselContent>
-                    {displayedDeals.map((property) => {
+                    {displayedB2BClosedDeals.map((property) => {
                       const transactionId = property.id || property._id || property.docId;
                       return (
                         <CarouselItem key={transactionId} className="basis-full">
@@ -501,7 +515,7 @@ const Home = () => {
         onClose={handleCloseModal}
         transactionId={selectedTransactionId}
         cachedTransaction={selectedTransaction}
-        allTransactions={closedTransactions}
+        allTransactions={[...kulshanClosedTransactions, ...b2bClosedTransactions]}
       />
 
       {/* Current Listing Modal */}
@@ -510,7 +524,7 @@ const Home = () => {
         onClose={handleCloseListingModal}
         listingId={selectedListingId}
         cachedListing={selectedListing}
-        allListings={currentListings}
+        allListings={[...kulshanCurrentListings, ...b2bCurrentListings]}
       />
     </div>
   );
