@@ -64,7 +64,7 @@ const CompactPropertyCard = ({ id, title = "Untitled", location = "", price, ask
 
   const cardContent = (
     <Card className="h-full overflow-hidden hover:shadow-md transition-shadow border-border/50">
-      <div className="w-full h-40 bg-muted overflow-hidden">
+      <div className="w-full aspect-video bg-muted overflow-hidden">
         <img
           src={thumb}
           alt={title}

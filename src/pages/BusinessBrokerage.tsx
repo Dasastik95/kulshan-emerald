@@ -139,20 +139,7 @@ const BusinessBrokerage = () => {
         </div>
       </section>
 
-      {/* B2B Listings Link */}
-      <section className="py-12 bg-[hsl(var(--red-primary))] text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h3 className="text-2xl font-bold mb-4">
-            Explore Available Business Opportunities
-          </h3>
-          <p className="text-xl text-white/90 mb-6">
-            Browse our current portfolio of businesses for sale
-          </p>
-          <Button size="lg" className="bg-white text-[hsl(var(--red-primary))] hover:bg-neutral-50" asChild>
-            <Link to="/listings">View Business Listings</Link>
-          </Button>
-        </div>
-      </section>
+   
     </div>
   );
 };

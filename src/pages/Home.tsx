@@ -327,10 +327,10 @@ const Home = () => {
                   </p>
                 </div>
                 <Button variant="ghost" size="sm" asChild>
-                  <Link to="/listings">
+                  <a href="https://b2bbusinessbrokers.com/listings" target="_blank" rel="noopener noreferrer">
                     View All
                     <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
+                  </a>
                 </Button>
               </div>
 
@@ -455,10 +455,10 @@ const Home = () => {
                   </p>
                 </div>
                 <Button variant="ghost" size="sm" asChild>
-                  <Link to="/listings/closed">
+                  <a href="https://b2bbusinessbrokers.com/Representative-Transactions" target="_blank" rel="noopener noreferrer">
                     View All
                     <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
+                  </a>
                 </Button>
               </div>
 

@@ -22,7 +22,7 @@ const Team: React.FC = () => {
     },
     {
       name: "Ben Nardi",
-      title: "Business Broker & Founder",
+      title: "Associated Team Member",
       company: "Everyday Realty, NH",
       bio: "Principal Broker with legal background (Juris Doctor). Specializes in business brokerage and real estate transactions in New Hampshire with extensive experience in business valuations and sales.",
       image: "/team_member/Ben Nardi.jpeg",
@@ -35,7 +35,7 @@ const Team: React.FC = () => {
       company: "bXb Business Brokers, Washington State",
       bio: "Experienced business broker specializing in working with Baby Boomers. Owner of several businesses with expertise in business valuations and strategic business transactions.",
       image: "/team_member/Dick Obendorf.jpeg",
-      website: "https://bxbbrokers.com",
+      // website: "https://bxbbrokers.com",
       linkedin: "https://linkedin.com/in/dick-obendorf",
     },
     {
